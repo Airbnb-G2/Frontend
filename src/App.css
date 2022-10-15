@@ -1,0 +1,15 @@
+.App {
+  text-align: center;
+}
+
+.App-header {
+  background-color: #FF5A5F;
+  min-height: 100px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: calc(10px + 2vmin);
+  color: white;
+  font-weight: 700;
+}
