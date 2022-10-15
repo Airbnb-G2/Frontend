@@ -6,9 +6,10 @@ import {
 import Home from '../Pages/Home';
 import Login from '../Pages/Login';
 import PageNotFound from '../Pages/PageNotFound';
+import Profile from '../Pages/Profile';
 import Signup from '../Pages/Signup';
 
-const userIsLogged = false;
+const userIsLogged = true;
 
 const AppRouter = () => (
   <BrowserRouter>
@@ -17,6 +18,7 @@ const AppRouter = () => (
         ? (
           <>
             <Route path="/" element={<Home />} />
+            <Route path="/profile/:userId" element={<Profile />} />
             <Route path="/*" element={<Navigate to="/" />} />
           </>
         )
