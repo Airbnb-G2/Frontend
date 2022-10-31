@@ -1,5 +1,4 @@
 import React, { useMemo } from 'react';
-// @mui
 import { CssBaseline } from '@mui/material';
 import {
   ThemeProvider as MUIThemeProvider,
@@ -18,7 +17,7 @@ const ThemeProvider = ({ children }) => {
     () => ({
       palette,
       typography,
-      customShadows: customShadows(),
+      customShadows,
     }),
     [],
   );

@@ -1,6 +1,7 @@
-/* eslint-disable object-curly-newline */
 import React from 'react';
-import { Routes, Route, BrowserRouter, Navigate } from 'react-router-dom';
+import {
+  Routes, Route, BrowserRouter, Navigate,
+} from 'react-router-dom';
 
 import Home from '../pages/Home';
 import Login from '../pages/Login';
