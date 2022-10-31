@@ -12,7 +12,6 @@ import {
 } from '@mui/material';
 
 const Login = () => {
-  const algo = 'algo';
   const [open, setOpen] = useState(false);
 
   return (
@@ -54,7 +53,7 @@ const Login = () => {
               </Button>
               <Typography variant="body2">
                 No tenés cuenta todavía?{' '}
-                <Link variant="subtitle2" href="/" underline="hover">
+                <Link variant="subtitle2" href="/signup" underline="hover">
                   Registrate
                 </Link>
               </Typography>
