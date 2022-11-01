@@ -90,7 +90,7 @@ const publications = [
 ];
 
 const user = {
-  role: 'host',
+  role: 'guest',
   id: 4,
 };
 

@@ -5,6 +5,9 @@ export const homeStyles = makeStyles(theme => ({
     display: 'flex',
     flexDirection: 'column',
     padding: 43,
+    [theme.breakpoints.down('tablet')]: {
+      padding: 22,
+    },
   },
   titleContainer: {
     display: 'flex',
@@ -18,7 +21,7 @@ export const homeStyles = makeStyles(theme => ({
   title: {
     fontSize: 32,
     [theme.breakpoints.down('tablet')]: {
-      fontSize: 28,
+      fontSize: 25,
     },
   },
   publicationsGrid: {
