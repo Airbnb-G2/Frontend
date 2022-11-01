@@ -4,6 +4,7 @@ export const customButtonStyles = makeStyles(theme => ({
   customButton: {
     color: theme.palette.common.white,
     height: 42,
+    width: 260,
     fontFamily: theme.typography.fontFamily,
     fontsize: 20,
     padding: '8px 22px',

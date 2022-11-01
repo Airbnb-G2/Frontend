@@ -100,12 +100,6 @@ const Home = () => {
 
   const [isHost, setIsHost] = useState(role === 'host');
 
-  // try {
-  //   const {message, publications} = api.getPublicationsByUserId(id);
-  // } catch (error) {
-  //   console.error(error);
-  // }
-
   return (
     <div className={styles.homeContainer}>
       <div className={styles.titleContainer}>

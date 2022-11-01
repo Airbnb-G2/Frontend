@@ -9,11 +9,16 @@ export const homeStyles = makeStyles(theme => ({
   titleContainer: {
     display: 'flex',
     justifyContent: 'space-between',
+    alignItems: 'center',
+    rowGap: 30,
+    [theme.breakpoints.down('tablet')]: {
+      flexDirection: 'column',
+    },
   },
   title: {
     fontSize: 32,
     [theme.breakpoints.down('tablet')]: {
-      fontSize: 24,
+      fontSize: 28,
     },
   },
   publicationsGrid: {
