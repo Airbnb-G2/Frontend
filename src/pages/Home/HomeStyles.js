@@ -6,6 +6,10 @@ export const homeStyles = makeStyles(theme => ({
     flexDirection: 'column',
     padding: 43,
   },
+  titleContainer: {
+    display: 'flex',
+    justifyContent: 'space-between',
+  },
   title: {
     fontSize: 32,
     [theme.breakpoints.down('tablet')]: {

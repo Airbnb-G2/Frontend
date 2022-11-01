@@ -1,5 +1,8 @@
-import { Divider, Grid, Typography } from '@mui/material';
-import React from 'react';
+import {
+  Divider, Grid, Typography,
+} from '@mui/material';
+import React, { useState } from 'react';
+import CustomButton from '../../components/CustomButton/CustomButton';
 import PublicationCard from '../../components/PublicationCard/PublicationCard';
 import { homeStyles } from './HomeStyles';
 
@@ -86,12 +89,24 @@ const publications = [
   },
 ];
 
+const user = {
+  role: 'host',
+};
+
 const Home = () => {
   const styles = homeStyles();
+  const { role } = user;
+
+  const [isHost, setIsHost] = useState(role === 'host');
 
   return (
     <div className={styles.homeContainer}>
-      <Typography className={styles.title}>Publicaciones destacadas</Typography>
+      <div className={styles.titleContainer}>
+        <Typography className={styles.title}>
+          {isHost ? 'Tus publicaciones' : 'Publicaciones destacadas'}
+        </Typography>
+        {isHost && <CustomButton variant="contained">Crear nueva publicación</CustomButton>}
+      </div>
       <Divider sx={{ mt: 2 }} />
       <Grid container rowSpacing={5} columnSpacing={5} className={styles.publicationsGrid}>
         {publications.map(publication => (
