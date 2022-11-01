@@ -9,9 +9,10 @@ import {
 } from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
 import airbnbLogo from '../../assets/airbnbLogo.svg';
-import './HeaderStyles.css';
+import { headerStyles } from './HeaderStyles';
 
 const Header = () => {
+  const styles = headerStyles();
   const theme = useTheme();
   const [anchorMenu, setAnchorMenu] = useState();
   const openMenu = !!anchorMenu;
@@ -47,19 +48,19 @@ const Header = () => {
 
   return (
     <>
-      <Box sx={{ backgroundColor: theme.palette.primary.main }} className="headerContainer">
-        <img alt="logo" src={airbnbLogo} className="logo" />
-        <button type="button" onClick={handleHeaderButton} className="menuButton">
+      <Box className={styles.headerContainer}>
+        <img alt="logo" src={airbnbLogo} className={styles.logo} />
+        <button type="button" onClick={handleHeaderButton} className={styles.menuButton}>
           {userIsLogged
-            ? <MenuIcon sx={{ fontSize: 40, fill: theme.palette.common.white }} />
+            ? <MenuIcon className={styles.menuIcon} />
             : <Typography color={theme.palette.common.white} variant="h4">Ingresar</Typography>}
         </button>
       </Box>
 
       <Menu open={openMenu} anchorEl={anchorMenu} onClose={handleCloseMenu}>
-        <Box sx={{ padding: '8px 16px', width: 200 }}>
-          <Typography className="userName">{firstName} {lastName}</Typography>
-          <Typography className="userMail">{mail}</Typography>
+        <Box className={styles.userInfoContainer}>
+          <Typography className={styles.userName}>{firstName} {lastName}</Typography>
+          <Typography className={styles.userMail}>{mail}</Typography>
         </Box>
         <Divider />
         <MenuItem type="text" onClick={handleLogOut}>Cerrar Sesión</MenuItem>
