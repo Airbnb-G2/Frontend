@@ -25,6 +25,13 @@ const GlobalStyles = () => {
           width: '100%',
           height: '100%',
         },
+        button: {
+          border: 'none',
+          background: 'transparent',
+          cursor: 'pointer',
+          padding: 0,
+          margin: 0,
+        },
         input: {
           '&[type=number]': {
             MozAppearance: 'textfield',
