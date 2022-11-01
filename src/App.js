@@ -1,15 +1,12 @@
 import React from 'react';
 import './App.css';
+import Header from './components/Header/Header';
 import AppRouter from './router/AppRouter';
 import ThemeProvider from './theme';
 
 const App = () => (
   <ThemeProvider>
-    <div className="App">
-      <header className="App-header">
-        <span>Airbnb - Grupo 2 - Admin I</span>
-      </header>
-    </div>
+    <Header />
     <AppRouter />
   </ThemeProvider>
 );
