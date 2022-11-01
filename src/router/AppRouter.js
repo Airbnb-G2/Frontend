@@ -2,12 +2,9 @@ import React from 'react';
 import {
   Routes, Route, BrowserRouter, Navigate,
 } from 'react-router-dom';
-
-import Home from '../pages/Home';
-import Login from '../pages/Login';
-import PageNotFound from '../pages/PageNotFound';
+import Home from '../pages/Home/Home';
 import Profile from '../pages/Profile';
-import Signup from '../pages/Signup';
+import Publication from '../pages/Publication';
 
 const userIsLogged = false;
 
@@ -16,6 +13,7 @@ const AppRouter = () => (
     <Routes>
       <Route path="/" element={<Home />} />
       <Route path="/profile/:userId" element={<Profile />} />
+      <Route path="/publication/:publicationId" element={<Publication />} />
       <Route path="/*" element={<Navigate to="/" />} />
     </Routes>
   </BrowserRouter>
