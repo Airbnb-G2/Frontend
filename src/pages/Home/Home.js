@@ -91,13 +91,20 @@ const publications = [
 
 const user = {
   role: 'host',
+  id: 4,
 };
 
 const Home = () => {
   const styles = homeStyles();
-  const { role } = user;
+  const { role, id } = user;
 
   const [isHost, setIsHost] = useState(role === 'host');
+
+  // try {
+  //   const {message, publications} = api.getPublicationsByUserId(id);
+  // } catch (error) {
+  //   console.error(error);
+  // }
 
   return (
     <div className={styles.homeContainer}>
