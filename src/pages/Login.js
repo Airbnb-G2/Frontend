@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import {
   Button,
   Divider,
@@ -15,11 +15,13 @@ import {
 import { Visibility, VisibilityOff } from '@mui/icons-material';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
+import { AuthContext } from '../context/Auth';
 import { dbPost } from '../utils/db';
 
 const Login = () => {
   const [open, setOpen] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
+  const { login } = useContext(AuthContext);
 
   const formValidation = Yup.object().shape({
     mail: Yup.string().required('Ingrese su correo electrónico'),
@@ -33,10 +35,7 @@ const Login = () => {
     },
     validationSchema: formValidation,
     onSubmit: (values) => {
-      console.log(values);
-      dbPost('auth/login', values)
-        .then((res) => console.log(res))
-        .catch((err) => console.log(err.data));
+      login(values.mail, values.password);
     },
   });
 
