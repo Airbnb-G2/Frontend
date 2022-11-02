@@ -6,11 +6,13 @@ import MenuIcon from '@mui/icons-material/Menu';
 import airbnbLogo from '../../assets/airbnbLogo.svg';
 import { headerStyles } from './HeaderStyles';
 import { AuthContext } from '../../context/Auth';
+import LoginForm from '../LoginForm/LoginForm';
 
 const Header = () => {
   const styles = headerStyles();
   const theme = useTheme();
   const [anchorMenu, setAnchorMenu] = useState();
+  const [loginOpen, setLoginOpen] = useState(false);
   const openMenu = !!anchorMenu;
 
   // Usuario mockeado---------
@@ -27,7 +29,7 @@ const Header = () => {
     if (authState.isLoggedIn) {
       setAnchorMenu(currentTarget);
     } else {
-      login('m@s.com', '1234');
+      setLoginOpen(true);
     }
   };
 
@@ -42,6 +44,7 @@ const Header = () => {
 
   return (
     <>
+      <LoginForm open={loginOpen} setOpen={setLoginOpen} />
       <Box className={styles.headerContainer}>
         <img alt="logo" src={airbnbLogo} className={styles.logo} />
         <button type="button" onClick={handleHeaderButton} className={styles.menuButton}>

@@ -15,11 +15,10 @@ import {
 import { Visibility, VisibilityOff } from '@mui/icons-material';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
-import { AuthContext } from '../context/Auth';
-import { dbPost } from '../utils/db';
+import { AuthContext } from '../../context/Auth';
+import { dbPost } from '../../utils/db';
 
-const Login = () => {
-  const [open, setOpen] = useState(false);
+const LoginForm = ({ open, setOpen }) => {
   const [showPassword, setShowPassword] = useState(false);
   const { login } = useContext(AuthContext);
 
@@ -36,6 +35,7 @@ const Login = () => {
     validationSchema: formValidation,
     onSubmit: (values) => {
       login(values.mail, values.password);
+      setOpen(false); // Cierra el modal pero deberia estar dentro de login para que se haga cuando success
     },
   });
 
@@ -118,4 +118,4 @@ const Login = () => {
   );
 };
 
-export default Login;
+export default LoginForm;
