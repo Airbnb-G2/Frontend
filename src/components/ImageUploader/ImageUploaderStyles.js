@@ -7,7 +7,4 @@ export const imageUploaderStyles = makeStyles(theme => ({
     border: `2px solid ${theme.palette.primary.main}`,
     borderRadius: 10,
   },
-  hidden: {
-    display: 'none',
-  },
 }));

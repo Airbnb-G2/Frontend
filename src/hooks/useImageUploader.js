@@ -1,38 +1,31 @@
 /* eslint-disable consistent-return */
-import { getDownloadURL, ref, uploadBytesResumable } from 'firebase/storage';
-import { useRef } from 'react';
+import {
+  getDownloadURL, ref, uploadBytes,
+} from 'firebase/storage';
+import { useState } from 'react';
 import { storage } from '../firebase';
 
 export const useImageUploader = () => {
-  const progress = useRef(0);
-  const imageURL = useRef();
+  const [imageUrls, setImageUrls] = useState([]);
 
-  const calculateProgress = ({ bytesTransferred, totalBytes }) => {
-    progress.current = (Math.round((bytesTransferred / totalBytes) * 100));
-  };
-
-  const getImageURL = uploadTask => {
-    getDownloadURL(uploadTask.snapshot.ref).then(url => {
-      imageURL.current = url;
+  const uploadFile = fileList => {
+    Object.values(fileList).forEach(file => {
+      if (!file) return;
+      const imageRef = ref(storage, `/publications/images/${file.name}`);
+      uploadBytes(imageRef, file).then(snapshot => {
+        getDownloadURL(snapshot.ref).then(url => {
+          setImageUrls(prev => [...prev, url]);
+        });
+      });
     });
   };
 
-  const uploadFile = file => {
-    if (!file) return;
-    const storageRef = ref(storage, `/publications/images/${file.name}`);
-    const uploadTask = uploadBytesResumable(storageRef, file);
-
-    uploadTask.on('state_changed',
-      snapshop => calculateProgress(snapshop),
-      error => console.error(error),
-      getImageURL(uploadTask),
-    );
-
-    return imageURL.current;
+  const uploadImage = event => {
+    uploadFile(event.target.files);
   };
 
   return {
-    uploadFile,
-    progress: progress.current,
+    uploadImage,
+    imageUrls,
   };
 };
