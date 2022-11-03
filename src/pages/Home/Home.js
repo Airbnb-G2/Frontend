@@ -1,7 +1,8 @@
+import React, { useState } from 'react';
 import {
   Divider, Grid, Typography,
 } from '@mui/material';
-import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import CustomButton from '../../components/CustomButton/CustomButton';
 import PublicationCard from '../../components/PublicationCard/PublicationCard';
 import { homeStyles } from './HomeStyles';
@@ -90,7 +91,7 @@ const publications = [
 ];
 
 const user = {
-  role: 'guest',
+  role: 'host',
   id: 4,
 };
 
@@ -99,6 +100,12 @@ const Home = () => {
   const { role, id } = user;
 
   const [isHost, setIsHost] = useState(role === 'host');
+  const navigate = useNavigate();
+
+  const handleCreatePublicationButton = () => {
+    console.log('nashe');
+    navigate('/create-publication');
+  };
 
   return (
     <div className={styles.homeContainer}>
@@ -106,7 +113,11 @@ const Home = () => {
         <Typography className={styles.title}>
           {isHost ? 'Tus publicaciones' : 'Publicaciones destacadas'}
         </Typography>
-        {isHost && <CustomButton variant="contained">Crear nueva publicación</CustomButton>}
+        {isHost && (
+        <CustomButton onClick={handleCreatePublicationButton} variant="contained">
+          Crear nueva publicación
+        </CustomButton>
+        )}
       </div>
       <Divider sx={{ mt: 2 }} />
       <Grid container rowSpacing={5} columnSpacing={5} className={styles.publicationsGrid}>
