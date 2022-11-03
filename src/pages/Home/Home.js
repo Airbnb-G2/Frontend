@@ -114,7 +114,7 @@ const Home = () => {
           {isHost ? 'Tus publicaciones' : 'Publicaciones destacadas'}
         </Typography>
         {isHost && (
-        <CustomButton onClick={handleCreatePublicationButton} variant="contained">
+        <CustomButton onClick={handleCreatePublicationButton}>
           Crear nueva publicación
         </CustomButton>
         )}
