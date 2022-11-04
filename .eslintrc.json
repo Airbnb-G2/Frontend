@@ -18,7 +18,6 @@
     "import/prefer-default-export": "off",
     "func-style": ["error", "declaration", { "allowArrowFunctions": true }],
     "react/function-component-definition": [2, { "namedComponents": "arrow-function" }],
-    "arrow-parens": ["error", "as-needed"],
     "react/prop-types": "off",
     "no-unused-vars": "off",
     "camelcase": "off",
