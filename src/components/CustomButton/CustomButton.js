@@ -2,10 +2,10 @@ import React from 'react';
 import { Button } from '@mui/material';
 import { customButtonStyles } from './CustomButtonStyles';
 
-const CustomButton = ({ children }) => {
+const CustomButton = ({ children, ...props }) => {
   const styles = customButtonStyles();
   return (
-    <Button className={styles.customButton}>{children}</Button>
+    <Button {...props} className={styles.customButton}>{children}</Button>
   );
 };
 export default CustomButton;

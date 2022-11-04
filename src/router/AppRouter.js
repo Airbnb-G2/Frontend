@@ -2,6 +2,8 @@ import React from 'react';
 import {
   Routes, Route, BrowserRouter, Navigate,
 } from 'react-router-dom';
+import Header from '../components/Header/Header';
+import CreatePublication from '../pages/CreatePublication/CreatePublication';
 import Home from '../pages/Home/Home';
 import Profile from '../pages/Profile';
 import Publication from '../pages/Publication';
@@ -10,10 +12,12 @@ const userIsLogged = false;
 
 const AppRouter = () => (
   <BrowserRouter>
+    <Header />
     <Routes>
       <Route path="/" element={<Home />} />
       <Route path="/profile/:userId" element={<Profile />} />
       <Route path="/publication/:publicationId" element={<Publication />} />
+      <Route path="/create-publication" element={<CreatePublication />} />
       <Route path="/*" element={<Navigate to="/" />} />
     </Routes>
   </BrowserRouter>

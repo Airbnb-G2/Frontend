@@ -1,7 +1,8 @@
+import React, { useState } from 'react';
 import {
   Divider, Grid, Typography,
 } from '@mui/material';
-import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import CustomButton from '../../components/CustomButton/CustomButton';
 import PublicationCard from '../../components/PublicationCard/PublicationCard';
 import { homeStyles } from './HomeStyles';
@@ -99,6 +100,11 @@ const Home = () => {
   const { role, id } = user;
 
   const [isHost, setIsHost] = useState(role === 'host');
+  const navigate = useNavigate();
+
+  const handleCreatePublicationButton = () => {
+    navigate('/create-publication');
+  };
 
   return (
     <div className={styles.homeContainer}>
@@ -106,12 +112,16 @@ const Home = () => {
         <Typography className={styles.title}>
           {isHost ? 'Tus publicaciones' : 'Publicaciones destacadas'}
         </Typography>
-        {isHost && <CustomButton variant="contained">Crear nueva publicación</CustomButton>}
+        {isHost && (
+        <CustomButton onClick={handleCreatePublicationButton}>
+          Crear nueva publicación
+        </CustomButton>
+        )}
       </div>
       <Divider sx={{ mt: 2 }} />
-      <Grid container rowSpacing={5} columnSpacing={5} className={styles.publicationsGrid}>
+      <Grid container spacing={5} className={styles.publicationsGrid}>
         {publications.map(publication => (
-          <Grid key={publication.id} item spacing={4}>
+          <Grid key={publication.id} item>
             <PublicationCard publication={publication} />
           </Grid>
         ))}

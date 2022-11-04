@@ -8,17 +8,21 @@ import {
   useTheme,
 } from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
+import { useNavigate } from 'react-router-dom';
 import airbnbLogo from '../../assets/airbnbLogo.svg';
 import { headerStyles } from './HeaderStyles';
+import SesionModal from '../SesionModal/SesionModal';
 
 const Header = () => {
   const styles = headerStyles();
   const theme = useTheme();
   const [anchorMenu, setAnchorMenu] = useState();
+  const [openLoginModal, setOpenLoginModal] = useState(false);
   const openMenu = !!anchorMenu;
+  const navigate = useNavigate();
 
   // Usuario mockeado---------
-  const [userIsLogged, setUserIsLogged] = useState(true);
+  const [userIsLogged, setUserIsLogged] = useState(false);
   const user = {
     firstName: 'John',
     lastName: 'Doue',
@@ -31,9 +35,7 @@ const Header = () => {
     if (userIsLogged) {
       setAnchorMenu(currentTarget);
     } else {
-      // Acá va la función que hace que se abra el modal del login
-      // Seguramente tengamos que manejar por context el login
-      setUserIsLogged(true);
+      setOpenLoginModal(true);
     }
   };
 
@@ -46,10 +48,16 @@ const Header = () => {
     handleCloseMenu();
   };
 
+  const onCloseLoginModal = () => {
+    setOpenLoginModal(false);
+  };
+
   return (
     <>
       <Box className={styles.headerContainer}>
-        <img alt="logo" src={airbnbLogo} className={styles.logo} />
+        <button type="button" onClick={() => navigate('/')}>
+          <img alt="logo" src={airbnbLogo} className={styles.logo} />
+        </button>
         <button type="button" onClick={handleHeaderButton} className={styles.menuButton}>
           {userIsLogged
             ? <MenuIcon className={styles.menuIcon} />
@@ -65,6 +73,7 @@ const Header = () => {
         <Divider />
         <MenuItem type="text" onClick={handleLogOut}>Cerrar Sesión</MenuItem>
       </Menu>
+      <SesionModal open={openLoginModal} onClose={onCloseLoginModal} />
     </>
   );
 };
