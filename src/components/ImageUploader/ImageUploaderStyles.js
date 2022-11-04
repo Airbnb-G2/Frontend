@@ -3,14 +3,14 @@ import { makeStyles } from '@mui/styles';
 
 export const imageUploaderStyles = makeStyles(theme => ({
   imageUploaderContainer: {
-    maxWidth: 400,
+    width: '100%',
     display: 'flex',
     flexDirection: 'column',
     justifyContent: 'center',
     alignItems: 'center',
     rowGap: 15,
     padding: 20,
-    border: `1px solid ${theme.palette.grey[500]}`,
+    border: `1px solid ${theme.palette.grey[300]}`,
     borderRadius: 4,
     '& input[type="file"]': {
       display: 'none',

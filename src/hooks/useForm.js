@@ -8,15 +8,26 @@ export const useForm = (initialState = {}) => {
   };
 
   const handleInputChange = ({ target }) => {
+    const { name } = target;
     setFormState({
       ...formState,
-      [target.name]: target.value,
+      [name]: target.value,
+    });
+  };
+
+  const multipleHandleSelectChange = ({ target }) => {
+    const { name, value } = target;
+    const item = typeof value === 'string' ? value.split(',') : value;
+    setFormState({
+      ...formState,
+      [name]: [...item],
     });
   };
 
   return {
     formState,
     handleInputChange,
+    multipleHandleSelectChange,
     reset,
   };
 };
