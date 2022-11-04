@@ -91,7 +91,7 @@ const publications = [
 ];
 
 const user = {
-  role: 'host',
+  role: 'guest',
   id: 4,
 };
 
@@ -119,9 +119,9 @@ const Home = () => {
         )}
       </div>
       <Divider sx={{ mt: 2 }} />
-      <Grid container rowSpacing={5} columnSpacing={5} className={styles.publicationsGrid}>
+      <Grid container spacing={5} className={styles.publicationsGrid}>
         {publications.map(publication => (
-          <Grid key={publication.id} item spacing={4}>
+          <Grid key={publication.id} item>
             <PublicationCard publication={publication} />
           </Grid>
         ))}
