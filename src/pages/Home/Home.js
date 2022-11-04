@@ -103,7 +103,6 @@ const Home = () => {
   const navigate = useNavigate();
 
   const handleCreatePublicationButton = () => {
-    console.log('nashe');
     navigate('/create-publication');
   };
 

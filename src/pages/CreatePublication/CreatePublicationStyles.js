@@ -42,4 +42,9 @@ export const createPublicationStyles = makeStyles(theme => ({
       width: 'none',
     },
   },
+  buttonsContainer: {
+    alignSelf: 'center',
+    display: 'flex',
+    columnGap: 20,
+  },
 }));

@@ -10,12 +10,16 @@ const ImageUploader = () => {
 
   return (
     <div className={styles.imageUploaderContainer}>
-      <Typography> Seleccione las imagenes</Typography>
+      {!imageUrls.length ? <Typography> Seleccione las imagenes</Typography>
+        : (
+          <div className={styles.imagesContainer}>
+            {imageUrls.map(url => <img className={styles.image} key="url" alt="publicationImage" src={url} />)}
+          </div>
+        ) }
       <label htmlFor="file-upload" className={styles.button}>
         SUBIR IMAGENES
       </label>
       <input id="file-upload" type="file" multiple onChange={uploadImage} />
-      {imageUrls.map(url => <img key="url" alt="hola" src={url} />)}
     </div>
   );
 };
