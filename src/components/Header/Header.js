@@ -8,6 +8,7 @@ import {
   useTheme,
 } from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
+import { useNavigate } from 'react-router-dom';
 import airbnbLogo from '../../assets/airbnbLogo.svg';
 import { headerStyles } from './HeaderStyles';
 
@@ -16,6 +17,7 @@ const Header = () => {
   const theme = useTheme();
   const [anchorMenu, setAnchorMenu] = useState();
   const openMenu = !!anchorMenu;
+  const navigate = useNavigate();
 
   // Usuario mockeado---------
   const [userIsLogged, setUserIsLogged] = useState(true);
@@ -49,7 +51,9 @@ const Header = () => {
   return (
     <>
       <Box className={styles.headerContainer}>
-        <img alt="logo" src={airbnbLogo} className={styles.logo} />
+        <button type="button" onClick={() => navigate('/')}>
+          <img alt="logo" src={airbnbLogo} className={styles.logo} />
+        </button>
         <button type="button" onClick={handleHeaderButton} className={styles.menuButton}>
           {userIsLogged
             ? <MenuIcon className={styles.menuIcon} />
