@@ -6,7 +6,6 @@ import ThemeProvider from './theme';
 
 const App = () => (
   <ThemeProvider>
-    <Header />
     <AppRouter />
   </ThemeProvider>
 );
