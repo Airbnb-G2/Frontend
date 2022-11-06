@@ -4,23 +4,29 @@ import {
   Checkbox,
   MenuItem,
   OutlinedInput,
+  Snackbar,
   TextField,
   Typography,
 } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import CustomSelect from '../../components/CustomSelect/CustomSelect';
 import ImageUploader from '../../components/ImageUploader/ImageUploader';
+import { dbPost } from '../../utils/db';
 import {
   AMENITIES, CITIES, COUNTRIES, PROVINCES,
 } from '../../constants';
 import { useForm } from '../../hooks/useForm';
 import { createPublicationStyles } from './CreatePublicationStyles';
 
+const userId = 1;
+
 const CreatePublicationForm = () => {
   const styles = createPublicationStyles();
   const [images, setImages] = useState([]);
+  const [openSnackbar, setOpenSnackbar] = useState(false);
   const navigate = useNavigate();
   const { formState, handleInputChange, multipleHandleSelectChange } = useForm({
+    hostId: userId,
     title: '',
     country: '',
     province: '',
@@ -32,7 +38,14 @@ const CreatePublicationForm = () => {
   });
 
   const handleSubmit = () => {
-    console.log('submit');
+    dbPost('rental', { ...formState, images })
+      .then((res) => {
+        setOpenSnackbar(true);
+        setTimeout(() => {
+          navigate(-1);
+        }, 1500);
+      })
+      .catch(({ data }) => console.log(data));
   };
 
   const handleCancel = () => {
@@ -146,6 +159,12 @@ const CreatePublicationForm = () => {
         <Button onClick={handleCancel}>Cancelar</Button>
         <Button onClick={handleSubmit} variant="contained">Crear</Button>
       </div>
+      <Snackbar
+        open={openSnackbar}
+        autoHideDuration={1500}
+        message="La publicación se creo correctamente!"
+        severity="success"
+      />
     </div>
   );
 };
