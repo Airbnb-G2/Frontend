@@ -22,7 +22,7 @@ const Header = () => {
   const navigate = useNavigate();
 
   // Usuario mockeado---------
-  const [userIsLogged, setUserIsLogged] = useState(false);
+  const [userIsLogged, setUserIsLogged] = useState(true);
   const user = {
     firstName: 'John',
     lastName: 'Doue',

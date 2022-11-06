@@ -17,6 +17,7 @@ const contentAuthData = (type, body) => {
   const requestData = {
     method: type,
     headers: {
+      'Access-Control-Allow-Origin': '*',
       Authorization: `Bearer ${token}`,
       'Content-Type': 'application/json',
     },

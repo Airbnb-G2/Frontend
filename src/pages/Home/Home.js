@@ -91,7 +91,7 @@ const publications = [
 ];
 
 const user = {
-  role: 'guest',
+  role: 'host',
   id: 4,
 };
 
