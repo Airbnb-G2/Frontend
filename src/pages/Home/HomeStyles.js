@@ -28,4 +28,19 @@ export const homeStyles = makeStyles(theme => ({
     justifyContent: 'center',
     marginTop: '0px',
   },
+  noPublicationsText: {
+    color: theme.palette.grey[400],
+    fontWeight: 800,
+    fontSize: 32,
+    alignSelf: 'center',
+    textAlign: 'center',
+    marginTop: 87,
+    [theme.breakpoints.down('tablet')]: {
+      fontSize: 24,
+    },
+  },
+  circularProgress: {
+    alignSelf: 'center',
+    marginTop: 81,
+  },
 }));
