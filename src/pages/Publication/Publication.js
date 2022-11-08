@@ -13,6 +13,7 @@ const Publication = () => {
   const [publication, setPublication] = useState({});
 
   const {
+    title,
     images,
     pricePerNight,
     address,
@@ -39,12 +40,12 @@ const Publication = () => {
 
   return (
     <div className={styles.publicationContainer}>
-      <Typography className={styles.title}>Título de la publicación</Typography>
-      <div className={styles.columnsContainer}>
-        {loading ? (
-          <CircularProgress size={40} className={styles.loader} />
-        ) : (
-          <>
+      {loading ? (
+        <CircularProgress size={40} className={styles.loader} />
+      ) : (
+        <>
+          <Typography className={styles.title}>{title}</Typography>
+          <div className={styles.columnsContainer}>
             <Carousel className={styles.carouselContainer}>
               {images?.map((image, index) => (
                 <img
@@ -84,9 +85,9 @@ const Publication = () => {
               <div className={styles.descriptionTitle}>Descripción</div>
               <div className={styles.descriptionContainer}>{description} </div>
             </div>
-          </>
-        )}
-      </div>
+          </div>
+        </>
+      )}
     </div>
   );
 };
