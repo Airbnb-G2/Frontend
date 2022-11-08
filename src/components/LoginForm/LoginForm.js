@@ -17,10 +17,12 @@ import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import { AuthContext } from '../../context/Auth';
 import { dbPost } from '../../utils/db';
+import { loginFormStyles } from './LoginFormStyles';
 
 const LoginForm = ({ open, setOpen }) => {
   const [showPassword, setShowPassword] = useState(false);
   const { login } = useContext(AuthContext);
+  const styles = loginFormStyles();
 
   const formValidation = Yup.object().shape({
     mail: Yup.string().required('Ingrese su correo electrónico'),

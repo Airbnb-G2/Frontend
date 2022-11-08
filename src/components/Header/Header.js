@@ -1,8 +1,7 @@
 import React, { useState, useContext } from 'react';
-import {
-  Box, Divider, Menu, MenuItem, Typography, useTheme,
-} from '@mui/material';
+import { Box, Divider, Menu, MenuItem, Typography, useTheme } from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
+import { useNavigate } from 'react-router-dom';
 import airbnbLogo from '../../assets/airbnbLogo.svg';
 import { headerStyles } from './HeaderStyles';
 import { AuthContext } from '../../context/Auth';
@@ -14,6 +13,7 @@ const Header = () => {
   const [anchorMenu, setAnchorMenu] = useState();
   const [loginOpen, setLoginOpen] = useState(false);
   const openMenu = !!anchorMenu;
+  const navigate = useNavigate();
 
   // Usuario mockeado---------
   const { authState, login, logout } = useContext(AuthContext);
@@ -42,11 +42,17 @@ const Header = () => {
     handleCloseMenu();
   };
 
+  const onCloseLoginModal = () => {
+    setOpenLoginModal(false);
+  };
+
   return (
     <>
       <LoginForm open={loginOpen} setOpen={setLoginOpen} />
       <Box className={styles.headerContainer}>
-        <img alt="logo" src={airbnbLogo} className={styles.logo} />
+        <button type="button" onClick={() => navigate('/')}>
+          <img alt="logo" src={airbnbLogo} className={styles.logo} />
+        </button>
         <button type="button" onClick={handleHeaderButton} className={styles.menuButton}>
           {authState.isLoggedIn ? (
             <MenuIcon className={styles.menuIcon} />
@@ -70,6 +76,7 @@ const Header = () => {
           Cerrar Sesión
         </MenuItem>
       </Menu>
+      <SesionModal open={openLoginModal} onClose={onCloseLoginModal} />
     </>
   );
 };

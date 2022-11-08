@@ -1,104 +1,45 @@
+import React, { useEffect, useState } from 'react';
 import {
+  CircularProgress,
   Divider, Grid, Typography,
 } from '@mui/material';
-import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import CustomButton from '../../components/CustomButton/CustomButton';
 import PublicationCard from '../../components/PublicationCard/PublicationCard';
 import { homeStyles } from './HomeStyles';
-
-const publications = [
-  {
-    id: 1,
-    images: ['https://www.carza.com/blog/wp-content/uploads/2018/03/ventajas-y-beneficios-de-vivir-en-un-departamento.jpg'],
-    title: 'Departamento 3 ambientes, Palermo',
-    description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque velit massa mattis donec fames. Dictum varius egestas sed iaculis quisque ullamcorper in vitae turpis.',
-    pricePerNight: 350,
-    city: 'Palermo',
-  },
-  {
-    id: 1,
-    images: ['https://www.carza.com/blog/wp-content/uploads/2018/03/ventajas-y-beneficios-de-vivir-en-un-departamento.jpg'],
-    title: 'Departamento 3 ambientes, Palermo',
-    description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque velit massa mattis donec fames. Dictum varius egestas sed iaculis quisque ullamcorper in vitae turpis.',
-    pricePerNight: 350,
-    city: 'Palermo',
-  },
-  {
-    id: 1,
-    images: ['https://www.carza.com/blog/wp-content/uploads/2018/03/ventajas-y-beneficios-de-vivir-en-un-departamento.jpg'],
-    title: 'Departamento 3 ambientes, Palermo',
-    description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque velit massa mattis donec fames. Dictum varius egestas sed iaculis quisque ullamcorper in vitae turpis.',
-    pricePerNight: 350,
-    city: 'Palermo',
-  },
-  {
-    id: 1,
-    images: ['https://www.carza.com/blog/wp-content/uploads/2018/03/ventajas-y-beneficios-de-vivir-en-un-departamento.jpg'],
-    title: 'Departamento 3 ambientes, Palermo',
-    description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque velit massa mattis donec fames. Dictum varius egestas sed iaculis quisque ullamcorper in vitae turpis.',
-    pricePerNight: 350,
-    city: 'Palermo',
-  },
-  {
-    id: 1,
-    images: ['https://www.carza.com/blog/wp-content/uploads/2018/03/ventajas-y-beneficios-de-vivir-en-un-departamento.jpg'],
-    title: 'Departamento 3 ambientes, Palermo',
-    description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque velit massa mattis donec fames. Dictum varius egestas sed iaculis quisque ullamcorper in vitae turpis.',
-    pricePerNight: 350,
-    city: 'Palermo',
-  },
-  {
-    id: 1,
-    images: ['https://www.carza.com/blog/wp-content/uploads/2018/03/ventajas-y-beneficios-de-vivir-en-un-departamento.jpg'],
-    title: 'Departamento 3 ambientes, Palermo',
-    description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque velit massa mattis donec fames. Dictum varius egestas sed iaculis quisque ullamcorper in vitae turpis.',
-    pricePerNight: 350,
-    city: 'Palermo',
-  },
-  {
-    id: 1,
-    images: ['https://www.carza.com/blog/wp-content/uploads/2018/03/ventajas-y-beneficios-de-vivir-en-un-departamento.jpg'],
-    title: 'Departamento 3 ambientes, Palermo',
-    description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque velit massa mattis donec fames. Dictum varius egestas sed iaculis quisque ullamcorper in vitae turpis.',
-    pricePerNight: 350,
-    city: 'Palermo',
-  },
-  {
-    id: 1,
-    images: ['https://www.carza.com/blog/wp-content/uploads/2018/03/ventajas-y-beneficios-de-vivir-en-un-departamento.jpg'],
-    title: 'Departamento 3 ambientes, Palermo',
-    description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque velit massa mattis donec fames. Dictum varius egestas sed iaculis quisque ullamcorper in vitae turpis.',
-    pricePerNight: 350,
-    city: 'Palermo',
-  },
-  {
-    id: 1,
-    images: ['https://www.carza.com/blog/wp-content/uploads/2018/03/ventajas-y-beneficios-de-vivir-en-un-departamento.jpg'],
-    title: 'Departamento 3 ambientes, Palermo',
-    description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque velit massa mattis donec fames. Dictum varius egestas sed iaculis quisque ullamcorper in vitae turpis.',
-    pricePerNight: 350,
-    city: 'Palermo',
-  },
-  {
-    id: 1,
-    images: ['https://www.carza.com/blog/wp-content/uploads/2018/03/ventajas-y-beneficios-de-vivir-en-un-departamento.jpg'],
-    title: 'Departamento 3 ambientes, Palermo',
-    description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque velit massa mattis donec fames. Dictum varius egestas sed iaculis quisque ullamcorper in vitae turpis.',
-    pricePerNight: 350,
-    city: 'Palermo',
-  },
-];
+import { dbGet } from '../../utils/db';
 
 const user = {
-  role: 'guest',
-  id: 4,
+  role: 'host',
+  id: 2,
 };
 
 const Home = () => {
   const styles = homeStyles();
   const { role, id } = user;
+  const [loading, setLoading] = useState(false);
+  const isHost = role === 'host';
 
-  const [isHost, setIsHost] = useState(role === 'host');
+  const [publications, setPublications] = useState([]);
+  const navigate = useNavigate();
+
+  const handleCreatePublicationButton = () => {
+    navigate('/create-publication');
+  };
+
+  const getPublications = () => {
+    setLoading(true);
+    dbGet(isHost ? `${id}/rental` : 'rental')
+      .then(({ items }) => {
+        setPublications(items);
+        setLoading(false);
+      })
+      .catch(({ data }) => console.error(data));
+  };
+
+  useEffect(() => {
+    getPublications();
+  }, [isHost]);
 
   return (
     <div className={styles.homeContainer}>
@@ -106,16 +47,29 @@ const Home = () => {
         <Typography className={styles.title}>
           {isHost ? 'Tus publicaciones' : 'Publicaciones destacadas'}
         </Typography>
-        {isHost && <CustomButton variant="contained">Crear nueva publicación</CustomButton>}
+        {isHost && (
+        <CustomButton onClick={handleCreatePublicationButton}>
+          Crear nueva publicación
+        </CustomButton>
+        )}
       </div>
       <Divider sx={{ mt: 2 }} />
-      <Grid container rowSpacing={5} columnSpacing={5} className={styles.publicationsGrid}>
-        {publications.map(publication => (
-          <Grid key={publication.id} item spacing={4}>
-            <PublicationCard publication={publication} />
+      {loading ? <CircularProgress size={40} className={styles.circularProgress} /> : (
+        <>
+          {!publications.length && isHost && (
+          <Typography className={styles.noPublicationsText}>
+            No tienes publicaciones todavía
+          </Typography>
+          )}
+          <Grid container spacing={5} className={styles.publicationsGrid}>
+            {publications.map(publication => (
+              <Grid key={publication.id} item>
+                <PublicationCard publication={publication} />
+              </Grid>
+            ))}
           </Grid>
-        ))}
-      </Grid>
+        </>
+      )}
     </div>
   );
 };
