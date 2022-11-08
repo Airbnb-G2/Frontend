@@ -1,7 +1,7 @@
 import { alpha } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 
-export const publicationCardStyles = makeStyles(theme => ({
+export const publicationCardStyles = makeStyles((theme) => ({
   cardPaper: {
     width: 320,
     height: 442,
