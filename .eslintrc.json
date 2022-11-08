@@ -28,6 +28,8 @@
     "no-plusplus": "off",
     "function-paren-newline": "off",
     "implicit-arrow-linebreak": "off",
-    "react/jsx-one-expression-per-line": "off"
+    "react/jsx-one-expression-per-line": "off",
+    "object-curly-newline": "off",
+    "react/no-array-index-key": "off"
   }
 }
