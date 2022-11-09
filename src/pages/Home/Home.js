@@ -1,8 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import {
-  CircularProgress,
-  Divider, Grid, Typography,
-} from '@mui/material';
+import { CircularProgress, Divider, Grid, Typography } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import CustomButton from '../../components/CustomButton/CustomButton';
 import PublicationCard from '../../components/PublicationCard/PublicationCard';
@@ -48,21 +45,23 @@ const Home = () => {
           {isHost ? 'Tus publicaciones' : 'Publicaciones destacadas'}
         </Typography>
         {isHost && (
-        <CustomButton onClick={handleCreatePublicationButton}>
-          Crear nueva publicación
-        </CustomButton>
+          <CustomButton onClick={handleCreatePublicationButton}>
+            Crear nueva publicación
+          </CustomButton>
         )}
       </div>
       <Divider sx={{ mt: 2 }} />
-      {loading ? <CircularProgress size={40} className={styles.circularProgress} /> : (
+      {loading ? (
+        <CircularProgress size={40} className={styles.circularProgress} />
+      ) : (
         <>
           {!publications.length && isHost && (
-          <Typography className={styles.noPublicationsText}>
-            No tienes publicaciones todavía
-          </Typography>
+            <Typography className={styles.noPublicationsText}>
+              No tienes publicaciones todavía
+            </Typography>
           )}
           <Grid container spacing={5} className={styles.publicationsGrid}>
-            {publications.map(publication => (
+            {publications.map((publication) => (
               <Grid key={publication.id} item>
                 <PublicationCard publication={publication} />
               </Grid>

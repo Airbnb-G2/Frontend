@@ -1,55 +1,45 @@
-import React, { useState } from 'react';
-import {
-  Box,
-  Divider,
-  Menu,
-  MenuItem,
-  Typography,
-  useTheme,
-} from '@mui/material';
+import React, { useState, useContext } from 'react';
+import { Box, Divider, Menu, MenuItem, Typography, useTheme } from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
 import { useNavigate } from 'react-router-dom';
+import SesionModal from '../SesionModal/SesionModal';
 import airbnbLogo from '../../assets/airbnbLogo.svg';
 import { headerStyles } from './HeaderStyles';
-import SesionModal from '../SesionModal/SesionModal';
+import { AuthContext } from '../../context/Auth';
+import LoginForm from '../LoginForm/LoginForm';
 
 const Header = () => {
   const styles = headerStyles();
   const theme = useTheme();
   const [anchorMenu, setAnchorMenu] = useState();
-  const [openLoginModal, setOpenLoginModal] = useState(false);
+  const [openLogin, setOpenLogin] = useState(false);
   const openMenu = !!anchorMenu;
   const navigate = useNavigate();
 
   // Usuario mockeado---------
-  const [userIsLogged, setUserIsLogged] = useState(true);
-  const user = {
-    firstName: 'John',
-    lastName: 'Doue',
-    mail: 'jdoe@gmail.com',
-  };
-  const { firstName, lastName, mail } = user;
+  const { authState, userInfo, logout } = useContext(AuthContext);
+  const { firstname, lastname, mail } = userInfo;
   //--------------------------
 
   const handleHeaderButton = ({ currentTarget }) => {
-    if (userIsLogged) {
+    if (authState.isLoggedIn) {
       setAnchorMenu(currentTarget);
     } else {
-      setOpenLoginModal(true);
+      setOpenLogin(true);
     }
   };
 
   const handleCloseMenu = () => {
-    setAnchorMenu();
+    setAnchorMenu(undefined);
   };
 
   const handleLogOut = () => {
-    setUserIsLogged(false);
+    logout();
     handleCloseMenu();
   };
 
   const onCloseLoginModal = () => {
-    setOpenLoginModal(false);
+    setOpenLogin(false);
   };
 
   return (
@@ -59,21 +49,29 @@ const Header = () => {
           <img alt="logo" src={airbnbLogo} className={styles.logo} />
         </button>
         <button type="button" onClick={handleHeaderButton} className={styles.menuButton}>
-          {userIsLogged
-            ? <MenuIcon className={styles.menuIcon} />
-            : <Typography color={theme.palette.common.white} variant="h4">Ingresar</Typography>}
+          {authState.isLoggedIn ? (
+            <MenuIcon className={styles.menuIcon} />
+          ) : (
+            <Typography color={theme.palette.common.white} variant="h4">
+              Ingresar
+            </Typography>
+          )}
         </button>
       </Box>
 
       <Menu open={openMenu} anchorEl={anchorMenu} onClose={handleCloseMenu}>
         <Box className={styles.userInfoContainer}>
-          <Typography className={styles.userName}>{firstName} {lastName}</Typography>
+          <Typography className={styles.userName}>
+            {firstname} {lastname}
+          </Typography>
           <Typography className={styles.userMail}>{mail}</Typography>
         </Box>
         <Divider />
-        <MenuItem type="text" onClick={handleLogOut}>Cerrar Sesión</MenuItem>
+        <MenuItem type="text" onClick={handleLogOut}>
+          Cerrar Sesión
+        </MenuItem>
       </Menu>
-      <SesionModal open={openLoginModal} onClose={onCloseLoginModal} />
+      <SesionModal open={openLogin} onClose={onCloseLoginModal} />
     </>
   );
 };

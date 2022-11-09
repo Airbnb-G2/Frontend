@@ -1,20 +1,29 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import {
   Button,
+  Divider,
+  Paper,
+  Stack,
   TextField,
   Typography,
+  Link,
+  Dialog,
+  DialogContent,
   InputAdornment,
   IconButton,
 } from '@mui/material';
+import { LoadingButton } from '@mui/lab/index';
 import { Visibility, VisibilityOff } from '@mui/icons-material';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
+import { AuthContext } from '../../context/Auth';
 import { dbPost } from '../../utils/db';
 import { loginFormStyles } from './LoginFormStyles';
 
 const LoginForm = ({ onChangeForm }) => {
-  const styles = loginFormStyles();
   const [showPassword, setShowPassword] = useState(false);
+  const { authState, login } = useContext(AuthContext);
+  const styles = loginFormStyles();
 
   const formValidation = Yup.object().shape({
     mail: Yup.string().required('Ingrese su correo electrónico'),
@@ -28,9 +37,7 @@ const LoginForm = ({ onChangeForm }) => {
     },
     validationSchema: formValidation,
     onSubmit: (values) => {
-      dbPost('auth/login', values)
-        .then((res) => console.log(res))
-        .catch((err) => console.log(err.data));
+      login(values.mail, values.password);
     },
   });
 
@@ -79,13 +86,14 @@ const LoginForm = ({ onChangeForm }) => {
         />
       </div>
       <div className={styles.submitButtonContainer}>
-        <Button
+        <LoadingButton
           variant="contained"
           fullWidth
           onClick={loginForm.submitForm}
+          loading={authState.isLoginPending}
         >
           INGRESAR
-        </Button>
+        </LoadingButton>
         <div className={styles.registerPhraseContainer}>
           <Typography variant="body2" align="center">
             No tenés cuenta todavía?
