@@ -5,12 +5,14 @@ import { Button, Chip, CircularProgress, Typography } from '@mui/material';
 import { LocationOn } from '@mui/icons-material';
 import { dbGet } from '../../utils/db';
 import { publicationStyles } from './PublicationStyles';
+import ReservationModal from '../../components/ReservationModal/ReservationModal';
 
 const Publication = () => {
   const styles = publicationStyles();
   const [loading, setLoading] = useState(false);
   const { publicationId } = useParams();
   const [publication, setPublication] = useState({});
+  const [openReservationModal, setOpenReservationModal] = useState(false);
 
   const {
     title,
@@ -32,6 +34,10 @@ const Publication = () => {
         setLoading(false);
       })
       .catch(({ data }) => console.error(data));
+  };
+
+  const handleReservation = () => {
+    setOpenReservationModal(true);
   };
 
   useEffect(() => {
@@ -56,12 +62,17 @@ const Publication = () => {
                 />
               ))}
             </Carousel>
+
             <div className={styles.rightColumn}>
               <div className={styles.priceContainer}>
                 <Typography className={styles.pricePerNight}>
                   $ARS {pricePerNight}
                 </Typography>
-                <Button variant="contained" color="primary">
+                <Button
+                  onClick={handleReservation}
+                  variant="contained"
+                  color="primary"
+                >
                   Reservar
                 </Button>
               </div>
@@ -86,6 +97,7 @@ const Publication = () => {
               <div className={styles.descriptionContainer}>{description} </div>
             </div>
           </div>
+          <ReservationModal open={openReservationModal} />
         </>
       )}
     </div>

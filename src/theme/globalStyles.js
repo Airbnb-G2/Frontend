@@ -5,9 +5,6 @@ const GlobalStyles = () => {
   const inputGlobalStyles = (
     <MUIGlobalStyles
       styles={{
-        '*': {
-          boxSizing: 'border-box',
-        },
         html: {
           margin: 0,
           padding: 0,
