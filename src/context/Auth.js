@@ -3,14 +3,23 @@ import { dbPost } from '../utils/db';
 
 export const AuthContext = createContext(null);
 
-const initialState = {
+const initialSessionState = {
   isLoggedIn: false,
   isLoginPending: false,
   loginError: null,
 };
 
+const initialUserState = {
+  id: null,
+  firstname: '',
+  lastname: '',
+  mail: '',
+  role: null,
+};
+
 export const AuthContextProvider = ({ children }) => {
-  const [authState, setAuthState] = useState(initialState);
+  const [authState, setAuthState] = useState(initialSessionState);
+  const [userInfo, setUserInfo] = useState(initialUserState);
 
   const setLoginSuccess = (isLoggedIn) => setAuthState({ ...authState, isLoggedIn });
   const setLoginPending = (isLoginPending) => setAuthState({ ...authState, isLoginPending });
@@ -23,6 +32,7 @@ export const AuthContextProvider = ({ children }) => {
         setLoginPending(false);
         console.log(res);
         setLoginSuccess(true);
+        setUserInfo(res[0]?.user);
       })
       .catch((err) => {
         console.log(err);
@@ -38,6 +48,7 @@ export const AuthContextProvider = ({ children }) => {
 
   const value = useMemo(() => ({
     authState,
+    userInfo,
     login,
     logout,
   }));

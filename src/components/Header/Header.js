@@ -17,13 +17,8 @@ const Header = () => {
   const navigate = useNavigate();
 
   // Usuario mockeado---------
-  const { authState, login, logout } = useContext(AuthContext);
-  const user = {
-    firstName: 'John',
-    lastName: 'Doue',
-    mail: 'jdoe@gmail.com',
-  };
-  const { firstName, lastName, mail } = user;
+  const { authState, userInfo, logout } = useContext(AuthContext);
+  const { firstname, lastname, mail } = userInfo;
   //--------------------------
 
   const handleHeaderButton = ({ currentTarget }) => {
@@ -67,7 +62,7 @@ const Header = () => {
       <Menu open={openMenu} anchorEl={anchorMenu} onClose={handleCloseMenu}>
         <Box className={styles.userInfoContainer}>
           <Typography className={styles.userName}>
-            {firstName} {lastName}
+            {firstname} {lastname}
           </Typography>
           <Typography className={styles.userMail}>{mail}</Typography>
         </Box>

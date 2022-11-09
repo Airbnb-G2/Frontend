@@ -30,8 +30,8 @@ const RegisterForm = ({ onChangeForm }) => {
   const { authState, login } = useContext(AuthContext);
 
   const formValidation = Yup.object().shape({
-    name: Yup.string().required('Ingrese su nombre'),
-    lastName: Yup.string().required('Ingrese su apellido'),
+    firstname: Yup.string().required('Ingrese su nombre'),
+    lastname: Yup.string().required('Ingrese su apellido'),
     mail: Yup.string().email('Email inválido').required('Ingrese un correo electrónico'),
     password: Yup.string().required('Ingrese una contraseña'),
     confirmPassword: Yup.string().required('Repita la contraseña'),
@@ -39,8 +39,8 @@ const RegisterForm = ({ onChangeForm }) => {
 
   const signupForm = useFormik({
     initialValues: {
-      name: '',
-      lastName: '',
+      firstname: '',
+      lastname: '',
       mail: '',
       password: '',
       confirmPassword: '',
@@ -75,25 +75,25 @@ const RegisterForm = ({ onChangeForm }) => {
       <div className={styles.inputsContainer}>
         <div className={styles.doubleInputsContainer}>
           <TextField
-            id="name"
+            id="firstname"
             label="Nombre"
             variant="outlined"
             placeholder="Ingrese su nombre"
-            value={signupForm.values.name}
+            value={signupForm.values.firstname}
             onChange={signupForm.handleChange}
-            error={!!signupForm.errors.name}
-            helperText={signupForm.errors.name}
+            error={!!signupForm.errors.firstname}
+            helperText={signupForm.errors.firstname}
             fullWidth
           />
           <TextField
-            id="lastName"
+            id="lastname"
             label="Apellido"
             variant="outlined"
             placeholder="Ingrese su apellido"
-            value={signupForm.values.lastName}
+            value={signupForm.values.lastname}
             onChange={signupForm.handleChange}
-            error={!!signupForm.errors.lastName}
-            helperText={signupForm.errors.lastName}
+            error={!!signupForm.errors.lastname}
+            helperText={signupForm.errors.lastname}
             fullWidth
           />
         </div>
@@ -161,7 +161,7 @@ const RegisterForm = ({ onChangeForm }) => {
         <FormControlLabel
           control={(
             <Checkbox
-              name="host"
+              firstname="host"
               value={signupForm.values.host}
               onChange={signupForm.handleChange}
               error={!!signupForm.errors.host}
