@@ -8,7 +8,6 @@ import ThemeProvider from './theme';
 const App = () => (
   <ThemeProvider>
     <AuthContextProvider>
-      <Header />
       <AppRouter />
     </AuthContextProvider>
   </ThemeProvider>

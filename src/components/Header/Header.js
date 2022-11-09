@@ -2,6 +2,7 @@ import React, { useState, useContext } from 'react';
 import { Box, Divider, Menu, MenuItem, Typography, useTheme } from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
 import { useNavigate } from 'react-router-dom';
+import SesionModal from '../SesionModal/SesionModal';
 import airbnbLogo from '../../assets/airbnbLogo.svg';
 import { headerStyles } from './HeaderStyles';
 import { AuthContext } from '../../context/Auth';
@@ -11,7 +12,7 @@ const Header = () => {
   const styles = headerStyles();
   const theme = useTheme();
   const [anchorMenu, setAnchorMenu] = useState();
-  const [loginOpen, setLoginOpen] = useState(false);
+  const [openLogin, setOpenLogin] = useState(false);
   const openMenu = !!anchorMenu;
   const navigate = useNavigate();
 
@@ -29,12 +30,12 @@ const Header = () => {
     if (authState.isLoggedIn) {
       setAnchorMenu(currentTarget);
     } else {
-      setLoginOpen(true);
+      setOpenLogin(true);
     }
   };
 
   const handleCloseMenu = () => {
-    setAnchorMenu();
+    setAnchorMenu(undefined);
   };
 
   const handleLogOut = () => {
@@ -43,12 +44,11 @@ const Header = () => {
   };
 
   const onCloseLoginModal = () => {
-    setOpenLoginModal(false);
+    setOpenLogin(false);
   };
 
   return (
     <>
-      <LoginForm open={loginOpen} setOpen={setLoginOpen} />
       <Box className={styles.headerContainer}>
         <button type="button" onClick={() => navigate('/')}>
           <img alt="logo" src={airbnbLogo} className={styles.logo} />
@@ -76,7 +76,7 @@ const Header = () => {
           Cerrar Sesión
         </MenuItem>
       </Menu>
-      <SesionModal open={openLoginModal} onClose={onCloseLoginModal} />
+      <SesionModal open={openLogin} onClose={onCloseLoginModal} />
     </>
   );
 };

@@ -156,16 +156,12 @@ const RegisterForm = ({ onChangeForm }) => {
               error={!!signupForm.errors.host}
               helperText={signupForm.errors.host}
             />
-                )}
+          )}
           label="Registrarse como anfitrión"
         />
       </div>
       <div className={styles.submitButtonContainer}>
-        <Button
-          variant="contained"
-          fullWidth
-          onClick={signupForm.submitForm}
-        >
+        <Button variant="contained" fullWidth onClick={signupForm.submitForm}>
           Registrarse
         </Button>
         <div className={styles.registerPhraseContainer}>
