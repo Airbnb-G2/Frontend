@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import {
   Button,
   Divider,
@@ -17,6 +17,8 @@ import {
 import { Visibility, VisibilityOff } from '@mui/icons-material';
 import * as Yup from 'yup';
 import { useFormik } from 'formik';
+import { LoadingButton } from '@mui/lab/index';
+import { AuthContext } from '../../context/Auth';
 import { registerFormStyles } from './RegisterFormStyles';
 import { dbPost } from '../../utils/db';
 
@@ -24,6 +26,8 @@ const RegisterForm = ({ onChangeForm }) => {
   const styles = registerFormStyles();
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const { authState, login } = useContext(AuthContext);
 
   const formValidation = Yup.object().shape({
     name: Yup.string().required('Ingrese su nombre'),
@@ -45,9 +49,16 @@ const RegisterForm = ({ onChangeForm }) => {
     validationSchema: formValidation,
     onSubmit: (values) => {
       console.log(values);
+      setLoading(true);
       dbPost('auth/signup', values)
-        .then((res) => console.log(res))
-        .catch((err) => console.log(err.data));
+        .then((res) => {
+          setLoading(false);
+          login(values.mail, values.password);
+        })
+        .catch((err) => {
+          console.log(err.data);
+          setLoading(false);
+        });
     },
   });
 
@@ -161,9 +172,14 @@ const RegisterForm = ({ onChangeForm }) => {
         />
       </div>
       <div className={styles.submitButtonContainer}>
-        <Button variant="contained" fullWidth onClick={signupForm.submitForm}>
+        <LoadingButton
+          variant="contained"
+          fullWidth
+          onClick={signupForm.submitForm}
+          loading={loading || authState.isLoginPending}
+        >
           Registrarse
-        </Button>
+        </LoadingButton>
         <div className={styles.registerPhraseContainer}>
           <Typography variant="body2" align="center">
             Ya tienes una cuenta?
