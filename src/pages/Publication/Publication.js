@@ -1,16 +1,19 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import Carousel from 'react-material-ui-carousel';
 import { Button, Chip, CircularProgress, Typography } from '@mui/material';
 import { LocationOn } from '@mui/icons-material';
 import { dbGet } from '../../utils/db';
 import { publicationStyles } from './PublicationStyles';
+import { AuthContext } from '../../context/Auth';
 
 const Publication = () => {
   const styles = publicationStyles();
   const [loading, setLoading] = useState(false);
   const { publicationId } = useParams();
   const [publication, setPublication] = useState({});
+  const { userInfo } = useContext(AuthContext);
+  const { id: userId } = userInfo;
 
   const {
     title,
@@ -22,6 +25,7 @@ const Publication = () => {
     country,
     amenities,
     description,
+    hostId,
   } = publication || {};
 
   const getPublication = () => {
@@ -61,9 +65,13 @@ const Publication = () => {
                 <Typography className={styles.pricePerNight}>
                   $ARS {pricePerNight}
                 </Typography>
-                <Button variant="contained" color="primary">
-                  Reservar
-                </Button>
+                {
+                  userId !== hostId && (
+                  <Button variant="contained" color="primary">
+                    Reservar
+                  </Button>
+                  )
+                }
               </div>
               <Typography className={styles.location}>
                 <LocationOn color="primary" />

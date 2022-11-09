@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import {
   Button,
   Checkbox,
@@ -17,10 +17,12 @@ import {
 } from '../../constants';
 import { useForm } from '../../hooks/useForm';
 import { createPublicationStyles } from './CreatePublicationStyles';
-
-const userId = 1;
+import { AuthContext } from '../../context/Auth';
 
 const CreatePublicationForm = () => {
+  const { userInfo } = useContext(AuthContext);
+  const { id: userId } = userInfo;
+
   const styles = createPublicationStyles();
   const [images, setImages] = useState([]);
   const [openSnackbar, setOpenSnackbar] = useState(false);
@@ -45,7 +47,7 @@ const CreatePublicationForm = () => {
           navigate(-1);
         }, 1500);
       })
-      .catch(({ data }) => console.log(data));
+      .catch(({ data }) => console.error(data));
   };
 
   const handleCancel = () => {

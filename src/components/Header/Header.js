@@ -16,10 +16,8 @@ const Header = () => {
   const openMenu = !!anchorMenu;
   const navigate = useNavigate();
 
-  // Usuario mockeado---------
   const { authState, userInfo, logout } = useContext(AuthContext);
   const { firstname, lastname, mail } = userInfo;
-  //--------------------------
 
   const handleHeaderButton = ({ currentTarget }) => {
     if (authState.isLoggedIn) {

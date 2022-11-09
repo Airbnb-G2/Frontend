@@ -29,7 +29,7 @@ const PublicationCard = ({ publication }) => {
           <CircularProgress sx={{ mt: 5 }} color="primary" size={30} />
         ) : (
           <>
-            <img alt={title} src={images[0] || noImage} className={styles.image} />
+            <img alt={title} src={images ? images[0] : noImage} className={styles.image} />
             <div className={styles.cardContent}>
               <Chip variant="outlined" label={city} color="primary" />
               <Typography variant="h5" align="left">{title}</Typography>

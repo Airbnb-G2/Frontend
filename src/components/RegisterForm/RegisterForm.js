@@ -48,15 +48,15 @@ const RegisterForm = ({ onChangeForm }) => {
     },
     validationSchema: formValidation,
     onSubmit: (values) => {
-      console.log(values);
+      const role = values.host ? 'host' : 'guest';
       setLoading(true);
-      dbPost('auth/signup', values)
+      dbPost('auth/signup', { ...values, role })
         .then((res) => {
           setLoading(false);
           login(values.mail, values.password);
         })
         .catch((err) => {
-          console.log(err.data);
+          console.error(err.data);
           setLoading(false);
         });
     },
@@ -161,7 +161,7 @@ const RegisterForm = ({ onChangeForm }) => {
         <FormControlLabel
           control={(
             <Checkbox
-              firstname="host"
+              name="host"
               value={signupForm.values.host}
               onChange={signupForm.handleChange}
               error={!!signupForm.errors.host}
