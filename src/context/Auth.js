@@ -30,12 +30,11 @@ export const AuthContextProvider = ({ children }) => {
     dbPost('auth/login', { mail, password })
       .then((res) => {
         setLoginPending(false);
-        console.log(res);
         setLoginSuccess(true);
         setUserInfo(res[0]?.user);
       })
       .catch((err) => {
-        console.log(err);
+        console.error(err);
         setLoginPending(false);
         setLoginSuccess(false);
         setLoginError(err);
@@ -44,6 +43,7 @@ export const AuthContextProvider = ({ children }) => {
 
   const logout = () => {
     setLoginSuccess(false);
+    setUserInfo(initialUserState);
   };
 
   const value = useMemo(() => ({

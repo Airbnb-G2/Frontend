@@ -1,17 +1,13 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { Divider, Typography } from '@mui/material';
 import CreatePublicationForm from './CreatePublicationForm';
 import { createPublicationStyles } from './CreatePublicationStyles';
-
-const user = {
-  role: 'guest',
-  id: 4,
-};
+import { AuthContext } from '../../context/Auth';
 
 const CreatePublication = () => {
+  const { userInfo } = useContext(AuthContext);
+  const { role, id } = userInfo;
   const styles = createPublicationStyles();
-
-  const { role, id } = user;
 
   return (
     <div className={styles.createPublicationContainer}>
