@@ -12,6 +12,7 @@ import {
   InputAdornment,
   IconButton,
 } from '@mui/material';
+import { LoadingButton } from '@mui/lab/index';
 import { Visibility, VisibilityOff } from '@mui/icons-material';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
@@ -21,7 +22,7 @@ import { loginFormStyles } from './LoginFormStyles';
 
 const LoginForm = ({ onChangeForm }) => {
   const [showPassword, setShowPassword] = useState(false);
-  const { login } = useContext(AuthContext);
+  const { authState, login } = useContext(AuthContext);
   const styles = loginFormStyles();
 
   const formValidation = Yup.object().shape({
@@ -85,9 +86,14 @@ const LoginForm = ({ onChangeForm }) => {
         />
       </div>
       <div className={styles.submitButtonContainer}>
-        <Button variant="contained" fullWidth onClick={loginForm.submitForm}>
+        <LoadingButton
+          variant="contained"
+          fullWidth
+          onClick={loginForm.submitForm}
+          loading={authState.isLoginPending}
+        >
           INGRESAR
-        </Button>
+        </LoadingButton>
         <div className={styles.registerPhraseContainer}>
           <Typography variant="body2" align="center">
             No tenés cuenta todavía?
