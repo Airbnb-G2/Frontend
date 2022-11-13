@@ -7,13 +7,14 @@ import { dbGet } from '../../utils/db';
 import { publicationStyles } from './PublicationStyles';
 import ReservationModal from '../../components/ReservationModal/ReservationModal';
 import { AuthContext } from '../../context/Auth';
+import SesionModal from '../../components/SesionModal/SesionModal';
 
 const Publication = () => {
   const styles = publicationStyles();
   const [loading, setLoading] = useState(false);
   const { publicationId } = useParams();
   const [publication, setPublication] = useState({});
-  const [openReservationModal, setOpenReservationModal] = useState(false);
+  const [handleOpenModal, setOpenReservationModal] = useState(false);
   const { userInfo } = useContext(AuthContext);
   const { id: userId } = userInfo;
 
@@ -28,6 +29,7 @@ const Publication = () => {
     amenities,
     description,
     hostId,
+    disabledDates,
   } = publication || {};
 
   const getPublication = () => {
@@ -44,7 +46,7 @@ const Publication = () => {
     setOpenReservationModal(true);
   };
 
-  const onCloseReservationModal = () => {
+  const handleCloseModal = () => {
     setOpenReservationModal(false);
   };
 
@@ -109,7 +111,13 @@ const Publication = () => {
               <div className={styles.descriptionContainer}>{description} </div>
             </div>
           </div>
-          <ReservationModal open={openReservationModal} onClose={onCloseReservationModal} />
+          {!userId ? <SesionModal open={handleOpenModal} onClose={handleCloseModal} />
+            : <ReservationModal
+                open={handleOpenModal}
+                onClose={handleCloseModal}
+                disabledDates={disabledDates}
+                publicationId={publicationId}
+            />}
         </>
       )}
     </div>

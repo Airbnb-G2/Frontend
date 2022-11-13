@@ -1,47 +1,51 @@
 import React, { useContext, useState } from 'react';
 import {
+  Box,
   Button,
   Dialog,
   DialogActions,
   DialogContent,
-  DialogContentText,
   DialogTitle,
-  Input,
   MenuItem,
   Snackbar,
-  Typography,
+  useTheme,
 } from '@mui/material';
-import DatePicker from 'react-datepicker';
 import { useNavigate } from 'react-router-dom';
+import { DateRangePicker } from 'react-date-range';
 import { reservationModalStyles } from './ReservationModalStyles';
 import CustomSelect from '../CustomSelect/CustomSelect';
 import { useForm } from '../../hooks/useForm';
 import { dbPost } from '../../utils/db';
 import { AuthContext } from '../../context/Auth';
+import { formatDates } from '../../utils/utils';
+import { useDatePicker } from '../../hooks/useDatePicker';
 
-const currentDate = new Date();
-
-const ReservationModal = ({ open, publicationId, onClose }) => {
-  const styles = reservationModalStyles();
-  const [dateRange, setDateRange] = useState([null, null]);
-  const [startDate, endDate] = dateRange;
-  const [openSnackbar, setOpenSnackbar] = useState(false);
-  const amountOfGuests = [1, 2, 3, 4, 5, 6];
+const ReservationModal = ({ open, onClose, publicationId, disabledDates = [] }) => {
   const navigate = useNavigate();
-
   const { userInfo } = useContext(AuthContext);
-  const { id: userId } = userInfo;
-
-  const { formState, handleInputChange } = useForm({
+  const [openSnackbar, setOpenSnackbar] = useState(false);
+  const { dateRange, handleCancelSelection, handleDateRangeSelect } = useDatePicker();
+  const { formState, handleInputChange, resetFormState } = useForm({
     numberOfGuests: '',
   });
 
+  const styles = reservationModalStyles();
+  const { id: userId } = userInfo;
+  const amountOfGuests = [1, 2, 3, 4, 5, 6];
+
+  const handleCancel = () => {
+    handleCancelSelection();
+    resetFormState();
+    onClose();
+  };
+
   const handleSubmit = () => {
+    const { startDate, endDate } = dateRange;
     dbPost('reservation', {
       rentalId: publicationId,
       guestId: userId,
-      fromDate: startDate,
-      toDate: endDate,
+      fromDate: formatDates(startDate),
+      toDate: formatDates(endDate),
     })
       .then(() => {
         setOpenSnackbar(true);
@@ -53,8 +57,10 @@ const ReservationModal = ({ open, publicationId, onClose }) => {
   };
 
   return (
-    <Dialog onClose={onClose} open={open}>
+    <Dialog onClose={handleCancel} open={open}>
+
       <DialogTitle>Registra tu reserva</DialogTitle>
+
       <DialogContent className={styles.modalContainer}>
         <CustomSelect
           name="numberOfGuests"
@@ -68,22 +74,21 @@ const ReservationModal = ({ open, publicationId, onClose }) => {
             </MenuItem>
           ))}
         </CustomSelect>
-        <Typography>Seleccione las fechas de reserva</Typography>
-        <DatePicker
-          selectsRange
-          className={styles.datePicker}
-          startDate={startDate}
-          endDate={endDate}
-          placeholderText="Seleccione el rango de fechas"
-          onChange={(update) => {
-            setDateRange(update);
-          }}
+        <DateRangePicker
+          ranges={[dateRange]}
+          onChange={handleDateRangeSelect}
+          staticRanges={[]}
+          inputRanges={[]}
+          className={styles.dateRangePicker}
+          disabledDates={disabledDates}
         />
       </DialogContent>
+
       <DialogActions>
-        <Button onClick={onClose}>Cancelar</Button>
+        <Button onClick={handleCancel}>Cancelar</Button>
         <Button onClick={handleSubmit}>Reservar</Button>
       </DialogActions>
+
       <Snackbar
         open={openSnackbar}
         autoHideDuration={1500}

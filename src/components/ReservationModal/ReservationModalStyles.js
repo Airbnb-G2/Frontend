@@ -2,7 +2,7 @@ import { makeStyles } from '@mui/styles';
 
 export const reservationModalStyles = makeStyles((theme) => ({
   modalContainer: {
-    height: 450,
+    height: 500,
     display: 'flex',
     flexDirection: 'column',
     rowGap: 20,
@@ -20,6 +20,14 @@ export const reservationModalStyles = makeStyles((theme) => ({
     },
     '&:hover': {
       outline: `1px solid ${theme.palette.grey[800]}`,
+    },
+  },
+  dateRangePicker: {
+    '& .rdrDefinedRangesWrapper': {
+      display: 'none',
+    },
+    '& .rdrDateDisplayWrapper': {
+      backgroundColor: 'transparent',
     },
   },
 }));
