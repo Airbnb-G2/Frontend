@@ -26,6 +26,7 @@
     "global-require": "off",
     "no-underscore-dangle": "off",
     "no-plusplus": "off",
+    "react/jsx-wrap-multilines": "off",
     "function-paren-newline": "off",
     "implicit-arrow-linebreak": "off",
     "react/jsx-one-expression-per-line": "off",

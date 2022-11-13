@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import Carousel from 'react-material-ui-carousel';
 import { Button, Chip, CircularProgress, Typography } from '@mui/material';
@@ -6,6 +6,7 @@ import { LocationOn } from '@mui/icons-material';
 import { dbGet } from '../../utils/db';
 import { publicationStyles } from './PublicationStyles';
 import ReservationModal from '../../components/ReservationModal/ReservationModal';
+import { AuthContext } from '../../context/Auth';
 
 const Publication = () => {
   const styles = publicationStyles();
@@ -13,6 +14,8 @@ const Publication = () => {
   const { publicationId } = useParams();
   const [publication, setPublication] = useState({});
   const [openReservationModal, setOpenReservationModal] = useState(false);
+  const { userInfo } = useContext(AuthContext);
+  const { id: userId } = userInfo;
 
   const {
     title,
@@ -24,6 +27,7 @@ const Publication = () => {
     country,
     amenities,
     description,
+    hostId,
   } = publication || {};
 
   const getPublication = () => {
@@ -38,6 +42,10 @@ const Publication = () => {
 
   const handleReservation = () => {
     setOpenReservationModal(true);
+  };
+
+  const onCloseReservationModal = () => {
+    setOpenReservationModal(false);
   };
 
   useEffect(() => {
@@ -68,13 +76,17 @@ const Publication = () => {
                 <Typography className={styles.pricePerNight}>
                   $ARS {pricePerNight}
                 </Typography>
-                <Button
-                  onClick={handleReservation}
-                  variant="contained"
-                  color="primary"
-                >
-                  Reservar
-                </Button>
+                {
+                  userId !== hostId && (
+                    <Button
+                      onClick={handleReservation}
+                      variant="contained"
+                      color="primary"
+                    >
+                      Reservar
+                    </Button>
+                  )
+                }
               </div>
               <Typography className={styles.location}>
                 <LocationOn color="primary" />
@@ -97,7 +109,7 @@ const Publication = () => {
               <div className={styles.descriptionContainer}>{description} </div>
             </div>
           </div>
-          <ReservationModal open={openReservationModal} />
+          <ReservationModal open={openReservationModal} onClose={onCloseReservationModal} />
         </>
       )}
     </div>

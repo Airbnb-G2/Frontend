@@ -1,22 +1,17 @@
-import React, { useEffect, useState } from 'react';
-import {
-  CircularProgress,
-  Divider, Grid, Typography,
-} from '@mui/material';
+import React, { useContext, useEffect, useState } from 'react';
+import { CircularProgress, Divider, Grid, Typography } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import CustomButton from '../../components/CustomButton/CustomButton';
 import PublicationCard from '../../components/PublicationCard/PublicationCard';
 import { homeStyles } from './HomeStyles';
 import { dbGet } from '../../utils/db';
-
-const user = {
-  role: 'host',
-  id: 2,
-};
+import { AuthContext } from '../../context/Auth';
 
 const Home = () => {
   const styles = homeStyles();
-  const { role, id } = user;
+  const { userInfo } = useContext(AuthContext);
+  const { role, id: userId } = userInfo;
+
   const [loading, setLoading] = useState(false);
   const isHost = role === 'host';
 
@@ -29,7 +24,7 @@ const Home = () => {
 
   const getPublications = () => {
     setLoading(true);
-    dbGet(isHost ? `${id}/rental` : 'rental')
+    dbGet(isHost ? `${userId}/rental` : 'rental')
       .then(({ items }) => {
         setPublications(items);
         setLoading(false);
@@ -48,21 +43,23 @@ const Home = () => {
           {isHost ? 'Tus publicaciones' : 'Publicaciones destacadas'}
         </Typography>
         {isHost && (
-        <CustomButton onClick={handleCreatePublicationButton}>
-          Crear nueva publicación
-        </CustomButton>
+          <CustomButton onClick={handleCreatePublicationButton}>
+            Crear nueva publicación
+          </CustomButton>
         )}
       </div>
       <Divider sx={{ mt: 2 }} />
-      {loading ? <CircularProgress size={40} className={styles.circularProgress} /> : (
+      {loading ? (
+        <CircularProgress size={40} className={styles.circularProgress} />
+      ) : (
         <>
           {!publications.length && isHost && (
-          <Typography className={styles.noPublicationsText}>
-            No tienes publicaciones todavía
-          </Typography>
+            <Typography className={styles.noPublicationsText}>
+              No tienes publicaciones todavía
+            </Typography>
           )}
           <Grid container spacing={5} className={styles.publicationsGrid}>
-            {publications.map(publication => (
+            {publications.map((publication) => (
               <Grid key={publication.id} item>
                 <PublicationCard publication={publication} />
               </Grid>

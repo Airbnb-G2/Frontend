@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import {
   Button,
   Divider,
@@ -17,6 +17,8 @@ import {
 import { Visibility, VisibilityOff } from '@mui/icons-material';
 import * as Yup from 'yup';
 import { useFormik } from 'formik';
+import { LoadingButton } from '@mui/lab/index';
+import { AuthContext } from '../../context/Auth';
 import { registerFormStyles } from './RegisterFormStyles';
 import { dbPost } from '../../utils/db';
 
@@ -24,10 +26,12 @@ const RegisterForm = ({ onChangeForm }) => {
   const styles = registerFormStyles();
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const { authState, login } = useContext(AuthContext);
 
   const formValidation = Yup.object().shape({
-    name: Yup.string().required('Ingrese su nombre'),
-    lastName: Yup.string().required('Ingrese su apellido'),
+    firstname: Yup.string().required('Ingrese su nombre'),
+    lastname: Yup.string().required('Ingrese su apellido'),
     mail: Yup.string().email('Email inválido').required('Ingrese un correo electrónico'),
     password: Yup.string().required('Ingrese una contraseña'),
     confirmPassword: Yup.string().required('Repita la contraseña'),
@@ -35,8 +39,8 @@ const RegisterForm = ({ onChangeForm }) => {
 
   const signupForm = useFormik({
     initialValues: {
-      name: '',
-      lastName: '',
+      firstname: '',
+      lastname: '',
       mail: '',
       password: '',
       confirmPassword: '',
@@ -44,10 +48,17 @@ const RegisterForm = ({ onChangeForm }) => {
     },
     validationSchema: formValidation,
     onSubmit: (values) => {
-      console.log(values);
-      dbPost('auth/signup', values)
-        .then((res) => console.log(res))
-        .catch((err) => console.log(err.data));
+      const role = values.host ? 'host' : 'guest';
+      setLoading(true);
+      dbPost('auth/signup', { ...values, role })
+        .then((res) => {
+          setLoading(false);
+          login(values.mail, values.password);
+        })
+        .catch((err) => {
+          console.error(err.data);
+          setLoading(false);
+        });
     },
   });
 
@@ -64,25 +75,25 @@ const RegisterForm = ({ onChangeForm }) => {
       <div className={styles.inputsContainer}>
         <div className={styles.doubleInputsContainer}>
           <TextField
-            id="name"
+            id="firstname"
             label="Nombre"
             variant="outlined"
             placeholder="Ingrese su nombre"
-            value={signupForm.values.name}
+            value={signupForm.values.firstname}
             onChange={signupForm.handleChange}
-            error={!!signupForm.errors.name}
-            helperText={signupForm.errors.name}
+            error={!!signupForm.errors.firstname}
+            helperText={signupForm.errors.firstname}
             fullWidth
           />
           <TextField
-            id="lastName"
+            id="lastname"
             label="Apellido"
             variant="outlined"
             placeholder="Ingrese su apellido"
-            value={signupForm.values.lastName}
+            value={signupForm.values.lastname}
             onChange={signupForm.handleChange}
-            error={!!signupForm.errors.lastName}
-            helperText={signupForm.errors.lastName}
+            error={!!signupForm.errors.lastname}
+            helperText={signupForm.errors.lastname}
             fullWidth
           />
         </div>
@@ -156,18 +167,19 @@ const RegisterForm = ({ onChangeForm }) => {
               error={!!signupForm.errors.host}
               helperText={signupForm.errors.host}
             />
-                )}
+          )}
           label="Registrarse como anfitrión"
         />
       </div>
       <div className={styles.submitButtonContainer}>
-        <Button
+        <LoadingButton
           variant="contained"
           fullWidth
           onClick={signupForm.submitForm}
+          loading={loading || authState.isLoginPending}
         >
           Registrarse
-        </Button>
+        </LoadingButton>
         <div className={styles.registerPhraseContainer}>
           <Typography variant="body2" align="center">
             Ya tienes una cuenta?

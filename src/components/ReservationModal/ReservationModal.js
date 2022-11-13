@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import {
   Button,
   Dialog,
@@ -17,10 +17,11 @@ import { reservationModalStyles } from './ReservationModalStyles';
 import CustomSelect from '../CustomSelect/CustomSelect';
 import { useForm } from '../../hooks/useForm';
 import { dbPost } from '../../utils/db';
+import { AuthContext } from '../../context/Auth';
 
 const currentDate = new Date();
 
-const ReservationModal = ({ open, publicationId }) => {
+const ReservationModal = ({ open, publicationId, onClose }) => {
   const styles = reservationModalStyles();
   const [dateRange, setDateRange] = useState([null, null]);
   const [startDate, endDate] = dateRange;
@@ -28,11 +29,12 @@ const ReservationModal = ({ open, publicationId }) => {
   const amountOfGuests = [1, 2, 3, 4, 5, 6];
   const navigate = useNavigate();
 
+  const { userInfo } = useContext(AuthContext);
+  const { id: userId } = userInfo;
+
   const { formState, handleInputChange } = useForm({
     numberOfGuests: '',
   });
-
-  const userId = 20;
 
   const handleSubmit = () => {
     dbPost('reservation', {
@@ -50,12 +52,8 @@ const ReservationModal = ({ open, publicationId }) => {
       .catch(({ data }) => console.error(data));
   };
 
-  const handleClose = () => {
-    console.log('asda');
-  };
-
   return (
-    <Dialog open={open}>
+    <Dialog onClose={onClose} open={open}>
       <DialogTitle>Registra tu reserva</DialogTitle>
       <DialogContent className={styles.modalContainer}>
         <CustomSelect
@@ -83,7 +81,7 @@ const ReservationModal = ({ open, publicationId }) => {
         />
       </DialogContent>
       <DialogActions>
-        <Button onClick={handleClose}>Cancelar</Button>
+        <Button onClick={onClose}>Cancelar</Button>
         <Button onClick={handleSubmit}>Reservar</Button>
       </DialogActions>
       <Snackbar
