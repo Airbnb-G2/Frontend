@@ -5,13 +5,16 @@ import { Button, Chip, CircularProgress, Typography } from '@mui/material';
 import { LocationOn } from '@mui/icons-material';
 import { dbGet } from '../../utils/db';
 import { publicationStyles } from './PublicationStyles';
+import ReservationModal from '../../components/ReservationModal/ReservationModal';
 import { AuthContext } from '../../context/Auth';
+import SesionModal from '../../components/SesionModal/SesionModal';
 
 const Publication = () => {
   const styles = publicationStyles();
   const [loading, setLoading] = useState(false);
   const { publicationId } = useParams();
   const [publication, setPublication] = useState({});
+  const [handleOpenModal, setOpenReservationModal] = useState(false);
   const { userInfo } = useContext(AuthContext);
   const { id: userId } = userInfo;
 
@@ -26,6 +29,7 @@ const Publication = () => {
     amenities,
     description,
     hostId,
+    disabledDates,
   } = publication || {};
 
   const getPublication = () => {
@@ -36,6 +40,14 @@ const Publication = () => {
         setLoading(false);
       })
       .catch(({ data }) => console.error(data));
+  };
+
+  const handleReservation = () => {
+    setOpenReservationModal(true);
+  };
+
+  const handleCloseModal = () => {
+    setOpenReservationModal(false);
   };
 
   useEffect(() => {
@@ -60,6 +72,7 @@ const Publication = () => {
                 />
               ))}
             </Carousel>
+
             <div className={styles.rightColumn}>
               <div className={styles.priceContainer}>
                 <Typography className={styles.pricePerNight}>
@@ -67,9 +80,13 @@ const Publication = () => {
                 </Typography>
                 {
                   userId !== hostId && (
-                  <Button variant="contained" color="primary">
-                    Reservar
-                  </Button>
+                    <Button
+                      onClick={handleReservation}
+                      variant="contained"
+                      color="primary"
+                    >
+                      Reservar
+                    </Button>
                   )
                 }
               </div>
@@ -94,6 +111,13 @@ const Publication = () => {
               <div className={styles.descriptionContainer}>{description} </div>
             </div>
           </div>
+          {!userId ? <SesionModal open={handleOpenModal} onClose={handleCloseModal} />
+            : <ReservationModal
+                open={handleOpenModal}
+                onClose={handleCloseModal}
+                disabledDates={disabledDates}
+                publicationId={publicationId}
+            />}
         </>
       )}
     </div>

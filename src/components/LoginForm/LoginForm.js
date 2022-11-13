@@ -1,14 +1,8 @@
 import React, { useState, useContext } from 'react';
 import {
   Button,
-  Divider,
-  Paper,
-  Stack,
   TextField,
   Typography,
-  Link,
-  Dialog,
-  DialogContent,
   InputAdornment,
   IconButton,
 } from '@mui/material';
@@ -17,7 +11,6 @@ import { Visibility, VisibilityOff } from '@mui/icons-material';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import { AuthContext } from '../../context/Auth';
-import { dbPost } from '../../utils/db';
 import { loginFormStyles } from './LoginFormStyles';
 
 const LoginForm = ({ onChangeForm }) => {
