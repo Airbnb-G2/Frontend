@@ -24,6 +24,9 @@ const PRIMARY = {
   darker: '#802D2F',
   contrastText: '#fff',
 };
+const WHITE = {
+  main: '#fff',
+};
 
 const SECONDARY = {
   lighter: '#D6E4FF',
@@ -74,6 +77,7 @@ const palette = {
   common: { black: '#000', white: '#fff' },
   primary: PRIMARY,
   secondary: SECONDARY,
+  white: WHITE,
   info: INFO,
   success: SUCCESS,
   warning: WARNING,

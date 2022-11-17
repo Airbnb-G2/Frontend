@@ -6,6 +6,7 @@ import PublicationCard from '../../components/PublicationCard/PublicationCard';
 import { homeStyles } from './HomeStyles';
 import { dbGet } from '../../utils/db';
 import { AuthContext } from '../../context/Auth';
+import Searcher from '../../components/Searcher/Searcher';
 
 const Home = () => {
   const styles = homeStyles();
@@ -38,6 +39,7 @@ const Home = () => {
 
   return (
     <div className={styles.homeContainer}>
+      {!isHost && <Searcher />}
       <div className={styles.titleContainer}>
         <Typography className={styles.title}>
           {isHost ? 'Tus publicaciones' : 'Publicaciones destacadas'}

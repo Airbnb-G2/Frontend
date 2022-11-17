@@ -22,8 +22,20 @@ export default function Button(theme) {
         containedPrimary: {
           boxShadow: theme.customShadows.primary,
         },
-        containedSecondary: {
-          boxShadow: theme.customShadows.secondary,
+        searchButton: {
+          backgroundColor: theme.palette.common.white,
+          boxShadow: 'none',
+          color: theme.palette.primary.main,
+          borderRadius: 8,
+          height: 42,
+          width: '100%',
+          fontFamily: theme.typography.fontFamily,
+          fontWeight: 700,
+          fontSize: 15,
+          textTransform: 'uppercase',
+          '&:hover': {
+            backgroundColor: theme.palette.grey[300],
+          },
         },
         outlinedInherit: {
           border: `1px solid ${alpha(theme.palette.grey[500], 0.32)}`,

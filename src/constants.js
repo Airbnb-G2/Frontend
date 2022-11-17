@@ -1,16 +1,8 @@
-export const COUNTRIES = [
-  'Argentina',
-  'Uruguay',
-];
+export const COUNTRIES = ['Argentina', 'Uruguay'];
 
 export const PROVINCES = {
-  Argentina: [
-    'Buenos Aires',
-    'Córdoba',
-  ],
-  Uruguay: [
-    'Montevideo',
-  ],
+  Argentina: ['Buenos Aires', 'Córdoba'],
+  Uruguay: ['Montevideo'],
 };
 
 export const CITIES = {
@@ -22,16 +14,8 @@ export const CITIES = {
     'Mar del Plata',
     'Villa Gesell',
   ],
-  Córdoba: [
-    'Villa Carlos Paz',
-    'Cosquin',
-    'Villa General Belgrano',
-  ],
-  Montevideo: [
-    'Ciudad de la Costa',
-    'Las Piedras',
-    'Barros Blancos',
-  ],
+  Córdoba: ['Villa Carlos Paz', 'Cosquin', 'Villa General Belgrano'],
+  Montevideo: ['Ciudad de la Costa', 'Las Piedras', 'Barros Blancos'],
 };
 
 export const AMENITIES = [
@@ -47,3 +31,5 @@ export const AMENITIES = [
   'Sauna',
   'Sala de cine',
 ];
+
+export const PUBLICATION_TYPES = ['Departamento', 'Casa', 'Cabaña'];
