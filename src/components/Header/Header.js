@@ -40,6 +40,11 @@ const Header = () => {
     setOpenLogin(false);
   };
 
+  const handleGoToProfile = () => {
+    navigate(`/profile/${userInfo.id}`);
+    handleCloseMenu();
+  };
+
   return (
     <>
       <Box className={styles.headerContainer}>
@@ -64,6 +69,7 @@ const Header = () => {
           </Typography>
           <Typography className={styles.userMail}>{mail}</Typography>
         </Box>
+        <MenuItem onClick={handleGoToProfile}>Perfil</MenuItem>
         <Divider />
         <MenuItem type="text" onClick={handleLogOut}>
           Cerrar Sesión
