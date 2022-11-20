@@ -1,16 +1,35 @@
-import React, { useContext } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { Typography } from '@mui/material';
 import { Stack } from '@mui/material/index';
 import { useParams } from 'react-router-dom';
+import { dbGet } from '../../utils/db';
 import { AuthContext } from '../../context/Auth';
 import { profileStyles } from './ProfileStyles';
 
 const Profile = (props) => {
   const styles = profileStyles();
   const { userInfo } = useContext(AuthContext);
+  const [profileInfo, setProfileInfo] = useState({
+    id: null,
+    firstname: null,
+    lastname: null,
+    mail: null,
+  });
   const params = useParams();
-  console.log('userInfo', userInfo);
-  console.log('pathname', params.userId);
+
+  useEffect(() => {
+    if (userInfo.id === +params.userId) {
+      setProfileInfo(userInfo);
+    } else {
+      dbGet(`user/${+params.userId}`)
+        .then((res) => {
+          console.log(res);
+          setProfileInfo(res);
+        })
+        .catch((err) => console.log(err));
+    }
+  }, []);
+
   return (
     <Stack alignItems="center" mt={5} spacing={1}>
       <svg
