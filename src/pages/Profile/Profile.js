@@ -23,7 +23,6 @@ const Profile = (props) => {
     } else {
       dbGet(`user/${+params.userId}`)
         .then((res) => {
-          console.log(res);
           setProfileInfo(res);
         })
         .catch((err) => console.log(err));
