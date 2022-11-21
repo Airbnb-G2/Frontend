@@ -11,7 +11,7 @@ import { searcherStyles } from './SearcherStyles';
 const SEARCH_TYPES = {
   UBICATION: 'ubication',
   PRICE_RANGE: 'priceRange',
-  PUBLICATION_TYPE: 'publicationType',
+  PUBLICATION_TYPE: 'type',
 };
 
 const BUTTONS = [
@@ -41,7 +41,7 @@ const Searcher = () => {
     pricePerNight: '',
     minPrice: '',
     maxPrice: '',
-    publicationType: '',
+    type: '',
   });
 
   const toggleButton = (event, typeSelected) => {
