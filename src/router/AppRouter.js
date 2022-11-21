@@ -5,7 +5,7 @@ import {
 import Header from '../components/Header/Header';
 import CreatePublication from '../pages/CreatePublication/CreatePublication';
 import Home from '../pages/Home/Home';
-import Profile from '../pages/Profile';
+import Profile from '../pages/Profile/Profile';
 import Publication from '../pages/Publication/Publication';
 
 const userIsLogged = false;
