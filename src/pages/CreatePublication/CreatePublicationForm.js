@@ -13,7 +13,11 @@ import CustomSelect from '../../components/CustomSelect/CustomSelect';
 import ImageUploader from '../../components/ImageUploader/ImageUploader';
 import { dbPost } from '../../utils/db';
 import {
-  AMENITIES, CITIES, COUNTRIES, PROVINCES,
+  AMENITIES,
+  CITIES,
+  COUNTRIES,
+  PROVINCES,
+  PUBLICATION_TYPES,
 } from '../../constants';
 import { useForm } from '../../hooks/useForm';
 import { createPublicationStyles } from './CreatePublicationStyles';
@@ -37,6 +41,7 @@ const CreatePublicationForm = () => {
     amenities: [],
     pricePerNight: '',
     description: '',
+    type: '',
   });
 
   const handleSubmit = () => {
@@ -71,7 +76,7 @@ const CreatePublicationForm = () => {
           label="País"
           onChange={handleInputChange}
         >
-          {COUNTRIES.map(country => (
+          {COUNTRIES.map((country) => (
             <MenuItem key={country} value={country}>
               {country}
             </MenuItem>
@@ -83,7 +88,7 @@ const CreatePublicationForm = () => {
           label="Provincia"
           onChange={handleInputChange}
         >
-          {PROVINCES[formState.country]?.map(province => (
+          {PROVINCES[formState.country]?.map((province) => (
             <MenuItem key={province} value={province}>
               {province}
             </MenuItem>
@@ -99,7 +104,7 @@ const CreatePublicationForm = () => {
           onChange={handleInputChange}
           input={<OutlinedInput label="Ciudad" />}
         >
-          {CITIES[formState.province]?.map(city => (
+          {CITIES[formState.province]?.map((city) => (
             <MenuItem key={city} value={city}>
               {city}
             </MenuItem>
@@ -111,6 +116,7 @@ const CreatePublicationForm = () => {
           label="Dirección"
           variant="outlined"
           placeholder="Ingrese la dirección"
+          onChange={handleInputChange}
         />
       </div>
       <div className={styles.multipleInputs}>
@@ -122,9 +128,9 @@ const CreatePublicationForm = () => {
           input={<OutlinedInput label="Amenities" />}
           onChange={multipleHandleSelectChange}
           value={formState.amenities}
-          renderValue={selected => selected.join(', ')}
+          renderValue={(selected) => selected.join(', ')}
         >
-          {AMENITIES.map(amenity => (
+          {AMENITIES.map((amenity) => (
             <MenuItem key={amenity} value={amenity}>
               <Checkbox checked={formState.amenities.indexOf(amenity) > -1} />
               {amenity}
@@ -145,6 +151,20 @@ const CreatePublicationForm = () => {
           }}
         />
       </div>
+      <CustomSelect
+        name="type"
+        value={formState.type}
+        label="Tipo de propiedad"
+        placeholder="Seleccione un tipo de propiedad"
+        onChange={handleInputChange}
+        input={<OutlinedInput label="Tpo de propiedad" />}
+      >
+        {PUBLICATION_TYPES.map((type) => (
+          <MenuItem key={type} value={type}>
+            {type}
+          </MenuItem>
+        ))}
+      </CustomSelect>
       <TextField
         fullWidth
         name="description"
@@ -159,7 +179,9 @@ const CreatePublicationForm = () => {
       <ImageUploader onChange={setImages} />
       <div className={styles.buttonsContainer}>
         <Button onClick={handleCancel}>Cancelar</Button>
-        <Button onClick={handleSubmit} variant="contained">Crear</Button>
+        <Button onClick={handleSubmit} variant="contained">
+          Crear
+        </Button>
       </div>
       <Snackbar
         open={openSnackbar}

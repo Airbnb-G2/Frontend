@@ -9,17 +9,17 @@ const PublicationTypeForm = ({ formState, handleInputChange }) => {
 
   return (
     <CustomSelect
-      name="publicationType"
-      value={formState.publicationType}
+      name="type"
+      value={formState.type}
       label="Tipo de propiedad"
       onChange={handleInputChange}
       size="small"
       color="white"
       className={styles.selector}
     >
-      {PUBLICATION_TYPES.map((publicationType) => (
-        <MenuItem key={publicationType} value={publicationType}>
-          {publicationType}
+      {PUBLICATION_TYPES.map((type) => (
+        <MenuItem key={type} value={type}>
+          {type}
         </MenuItem>
       ))}
     </CustomSelect>
