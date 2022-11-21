@@ -1,6 +1,7 @@
 /* eslint-disable no-unused-expressions */
 import { Button, ToggleButton, ToggleButtonGroup } from '@mui/material';
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useForm } from '../../hooks/useForm';
 import PriceRangeForm from './PriceRangeForm';
 import PublicationTypeForm from './PublicationTypeForm';
@@ -31,12 +32,9 @@ const BUTTONS = [
 const Searcher = () => {
   const styles = searcherStyles();
   const [searchType, setSearchType] = useState(SEARCH_TYPES.UBICATION);
+  const navigate = useNavigate();
 
-  const toggleButton = (event, typeSelected) => {
-    setSearchType(typeSelected);
-  };
-
-  const { formState, handleInputChange } = useForm({
+  const { formState, handleInputChange, resetFormState } = useForm({
     country: '',
     province: '',
     city: '',
@@ -45,6 +43,22 @@ const Searcher = () => {
     maxPrice: '',
     publicationType: '',
   });
+
+  const toggleButton = (event, typeSelected) => {
+    resetFormState();
+    setSearchType(typeSelected);
+  };
+
+  const getSearchQuery = () =>
+    Object.entries(formState).reduce(
+      (search, [key, value]) => (value ? `${search}${key}=${value}&` : search),
+      '?',
+    );
+
+  const onSubmit = () => {
+    const query = getSearchQuery();
+    navigate(query);
+  };
 
   return (
     <div className={styles.searcherContainer}>
@@ -84,7 +98,9 @@ const Searcher = () => {
         </div>
       </div>
       <div className={styles.rightColumn}>
-        <Button variant="searchButton">Buscar</Button>
+        <Button onClick={onSubmit} variant="searchButton">
+          Buscar
+        </Button>
       </div>
     </div>
   );

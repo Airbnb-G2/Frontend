@@ -1,5 +1,6 @@
 import { TextField } from '@mui/material';
 import React from 'react';
+import { formatPrice } from '../../utils/utils';
 import { searcherStyles } from './SearcherStyles';
 
 const PriceRangeForm = ({ formState, handleInputChange }) => {
@@ -14,7 +15,6 @@ const PriceRangeForm = ({ formState, handleInputChange }) => {
         onChange={handleInputChange}
         size="small"
         color="white"
-        type="number"
         InputProps={{
           className: styles.textField,
         }}
@@ -26,11 +26,9 @@ const PriceRangeForm = ({ formState, handleInputChange }) => {
         fullWidth
         name="maxPrice"
         label="Máximo"
-        type="number"
         onChange={handleInputChange}
         size="small"
         color="white"
-        prefix="$"
         InputProps={{
           className: styles.textField,
         }}
