@@ -1,22 +1,26 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { CircularProgress, Divider, Grid, Typography } from '@mui/material';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
+import queryString from 'query-string';
 import CustomButton from '../../components/CustomButton/CustomButton';
 import PublicationCard from '../../components/PublicationCard/PublicationCard';
 import { homeStyles } from './HomeStyles';
 import { dbGet } from '../../utils/db';
 import { AuthContext } from '../../context/Auth';
+import Searcher from '../../components/Searcher/Searcher';
 
 const Home = () => {
   const styles = homeStyles();
   const { userInfo } = useContext(AuthContext);
-  const { role, id: userId } = userInfo;
-
   const [loading, setLoading] = useState(false);
-  const isHost = role === 'host';
-
   const [publications, setPublications] = useState([]);
+  const location = useLocation();
   const navigate = useNavigate();
+
+  const { role, id: userId } = userInfo;
+  const search = queryString.parse(location.search);
+
+  const isHost = role === 'host';
 
   const handleCreatePublicationButton = () => {
     navigate('/create-publication');
@@ -24,7 +28,7 @@ const Home = () => {
 
   const getPublications = () => {
     setLoading(true);
-    dbGet(isHost ? `${userId}/rental` : 'rental')
+    dbGet(isHost ? `${userId}/rental` : 'rental', search)
       .then(({ items }) => {
         setPublications(items);
         setLoading(false);
@@ -36,8 +40,13 @@ const Home = () => {
     getPublications();
   }, [isHost]);
 
+  useEffect(() => {
+    getPublications();
+  }, [location]);
+
   return (
     <div className={styles.homeContainer}>
+      {!isHost && <Searcher />}
       <div className={styles.titleContainer}>
         <Typography className={styles.title}>
           {isHost ? 'Tus publicaciones' : 'Publicaciones destacadas'}
@@ -48,7 +57,7 @@ const Home = () => {
           </CustomButton>
         )}
       </div>
-      <Divider sx={{ mt: 2 }} />
+      <Divider />
       {loading ? (
         <CircularProgress size={40} className={styles.circularProgress} />
       ) : (

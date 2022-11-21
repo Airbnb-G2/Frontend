@@ -1,10 +1,11 @@
 import { makeStyles } from '@mui/styles';
 
-export const homeStyles = makeStyles(theme => ({
+export const homeStyles = makeStyles((theme) => ({
   homeContainer: {
     display: 'flex',
     flexDirection: 'column',
     padding: 43,
+    rowGap: 30,
     [theme.breakpoints.down('tablet')]: {
       padding: 22,
     },

@@ -1,3 +1,7 @@
 import moment from 'moment';
 
-export const formatDates = (date) => moment(date).format('YYYY-MM-DD');
+const priceFormatter = new Intl.NumberFormat('es-ar');
+
+export const formatDate = (date) => moment(date).format('YYYY-MM-DD');
+
+export const formatPrice = (price) => priceFormatter.format(Number(price));

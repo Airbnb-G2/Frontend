@@ -8,7 +8,6 @@ import {
   DialogTitle,
   MenuItem,
   Snackbar,
-  useTheme,
 } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import { DateRangePicker } from 'react-date-range';
@@ -17,10 +16,15 @@ import CustomSelect from '../CustomSelect/CustomSelect';
 import { useForm } from '../../hooks/useForm';
 import { dbPost } from '../../utils/db';
 import { AuthContext } from '../../context/Auth';
-import { formatDates } from '../../utils/utils';
+import { formatDate } from '../../utils/utils';
 import { useDatePicker } from '../../hooks/useDatePicker';
 
-const ReservationModal = ({ open, onClose, publicationId, disabledDates = [] }) => {
+const ReservationModal = ({
+  open,
+  onClose,
+  publicationId,
+  disabledDates = [],
+}) => {
   const navigate = useNavigate();
   const { userInfo } = useContext(AuthContext);
   const [openSnackbar, setOpenSnackbar] = useState(false);
@@ -44,8 +48,8 @@ const ReservationModal = ({ open, onClose, publicationId, disabledDates = [] }) 
     dbPost('reservation', {
       rentalId: publicationId,
       guestId: userId,
-      fromDate: formatDates(startDate),
-      toDate: formatDates(endDate),
+      fromDate: formatDate(startDate),
+      toDate: formatDate(endDate),
     })
       .then(() => {
         setOpenSnackbar(true);
@@ -58,7 +62,6 @@ const ReservationModal = ({ open, onClose, publicationId, disabledDates = [] }) 
 
   return (
     <Dialog onClose={handleCancel} open={open}>
-
       <DialogTitle>Registra tu reserva</DialogTitle>
 
       <DialogContent className={styles.modalContainer}>
