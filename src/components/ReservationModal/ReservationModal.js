@@ -1,6 +1,5 @@
 import React, { useContext, useState } from 'react';
 import {
-  Box,
   Button,
   Dialog,
   DialogActions,
@@ -80,6 +79,7 @@ const ReservationModal = ({
         <DateRangePicker
           ranges={[dateRange]}
           onChange={handleDateRangeSelect}
+          minDate={new Date()}
           staticRanges={[]}
           inputRanges={[]}
           className={styles.dateRangePicker}

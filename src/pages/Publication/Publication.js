@@ -8,6 +8,7 @@ import { publicationStyles } from './PublicationStyles';
 import ReservationModal from '../../components/ReservationModal/ReservationModal';
 import { AuthContext } from '../../context/Auth';
 import SesionModal from '../../components/SesionModal/SesionModal';
+import { getDatesInRange } from '../../utils/utils';
 
 const Publication = () => {
   const styles = publicationStyles();
@@ -16,6 +17,7 @@ const Publication = () => {
   const [publication, setPublication] = useState({});
   const [handleOpenModal, setOpenReservationModal] = useState(false);
   const { userInfo } = useContext(AuthContext);
+  const [disabledDates, setDisabledDates] = useState();
   const { id: userId } = userInfo;
 
   const {
@@ -29,17 +31,29 @@ const Publication = () => {
     amenities,
     description,
     hostId,
-    disabledDates,
+    reservations,
   } = publication || {};
 
   const getPublication = () => {
     setLoading(true);
+
     dbGet(`rental/${publicationId}`)
       .then(({ rental }) => {
         setPublication(rental);
         setLoading(false);
       })
       .catch(({ data }) => console.error(data));
+  };
+
+  const getDisabledDates = () => {
+    let dates = [];
+
+    if (!reservations?.length) return;
+
+    reservations.forEach(({ fromDate, toDate }) => {
+      dates = dates.concat(getDatesInRange(fromDate, toDate));
+    });
+    setDisabledDates([...new Set(dates.flat())]);
   };
 
   const handleReservation = () => {
@@ -53,6 +67,10 @@ const Publication = () => {
   useEffect(() => {
     getPublication();
   }, []);
+
+  useEffect(() => {
+    getDisabledDates();
+  }, [reservations]);
 
   return (
     <div className={styles.publicationContainer}>
@@ -78,17 +96,15 @@ const Publication = () => {
                 <Typography className={styles.pricePerNight}>
                   $ARS {pricePerNight}
                 </Typography>
-                {
-                  userId !== hostId && (
-                    <Button
-                      onClick={handleReservation}
-                      variant="contained"
-                      color="primary"
-                    >
-                      Reservar
-                    </Button>
-                  )
-                }
+                {userId !== hostId && (
+                  <Button
+                    onClick={handleReservation}
+                    variant="contained"
+                    color="primary"
+                  >
+                    Reservar
+                  </Button>
+                )}
               </div>
               <Typography className={styles.location}>
                 <LocationOn color="primary" />
@@ -111,13 +127,16 @@ const Publication = () => {
               <div className={styles.descriptionContainer}>{description} </div>
             </div>
           </div>
-          {!userId ? <SesionModal open={handleOpenModal} onClose={handleCloseModal} />
-            : <ReservationModal
-                open={handleOpenModal}
-                onClose={handleCloseModal}
-                disabledDates={disabledDates}
-                publicationId={publicationId}
-            />}
+          {!userId ? (
+            <SesionModal open={handleOpenModal} onClose={handleCloseModal} />
+          ) : (
+            <ReservationModal
+              open={handleOpenModal}
+              onClose={handleCloseModal}
+              disabledDates={disabledDates}
+              publicationId={publicationId}
+            />
+          )}
         </>
       )}
     </div>
