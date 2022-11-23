@@ -9,6 +9,9 @@ import ReservationModal from '../../components/ReservationModal/ReservationModal
 import { AuthContext } from '../../context/Auth';
 import SesionModal from '../../components/SesionModal/SesionModal';
 import { getDatesInRange } from '../../utils/utils';
+import Comment from '../../components/Comment/Comment';
+import UserTitle from '../../components/UserTitle/UserTitle';
+import { REVIEW_TYPE } from '../../constants';
 
 const Publication = () => {
   const styles = publicationStyles();
@@ -18,9 +21,12 @@ const Publication = () => {
   const [handleOpenModal, setOpenReservationModal] = useState(false);
   const { userInfo } = useContext(AuthContext);
   const [disabledDates, setDisabledDates] = useState();
+  const [hostUser, setHostUser] = useState({});
+  const [reviews, setReviews] = useState([]);
   const { id: userId } = userInfo;
 
   const {
+    id,
     title,
     images,
     pricePerNight,
@@ -31,7 +37,7 @@ const Publication = () => {
     amenities,
     description,
     hostId,
-    reservations,
+    reservations
   } = publication || {};
 
   const getPublication = () => {
@@ -43,6 +49,22 @@ const Publication = () => {
         setLoading(false);
       })
       .catch(({ data }) => console.error(data));
+  };
+
+  const getHostInfo = () => {
+    dbGet(`user/${hostId}`)
+      .then((res) => {
+        setHostUser(res);
+      })
+      .catch((err) => console.error(err));
+  };
+
+  const getReviews = () => {
+    dbGet(`review/${id}`, { type: REVIEW_TYPE.RENTAL })
+      .then((res) => {
+        setReviews(res);
+      })
+      .catch((err) => console.error(err));
   };
 
   const getDisabledDates = () => {
@@ -69,6 +91,14 @@ const Publication = () => {
   }, []);
 
   useEffect(() => {
+    getHostInfo();
+  }, [hostId]);
+
+  useEffect(() => {
+    getReviews();
+  }, [id]);
+
+  useEffect(() => {
     getDisabledDates();
   }, [reservations]);
 
@@ -80,17 +110,18 @@ const Publication = () => {
         <>
           <Typography className={styles.title}>{title}</Typography>
           <div className={styles.columnsContainer}>
-            <Carousel className={styles.carouselContainer}>
-              {images?.map((image, index) => (
-                <img
-                  className={styles.image}
-                  key={index}
-                  src={image}
-                  alt={image}
-                />
-              ))}
-            </Carousel>
-
+            <div className={styles.leftColumn}>
+              <Carousel className={styles.carouselContainer}>
+                {images?.map((image, index) => (
+                  <img
+                    className={styles.image}
+                    key={index}
+                    src={image}
+                    alt={image}
+                  />
+                ))}
+              </Carousel>
+            </div>
             <div className={styles.rightColumn}>
               <div className={styles.priceContainer}>
                 <Typography className={styles.pricePerNight}>
@@ -106,6 +137,7 @@ const Publication = () => {
                   </Button>
                 )}
               </div>
+              <UserTitle user={hostUser} />
               <Typography className={styles.location}>
                 <LocationOn color="primary" />
                 {address && `${address}, `}
@@ -123,9 +155,37 @@ const Publication = () => {
                   />
                 ))}
               </div>
-              <div className={styles.descriptionTitle}>Descripción</div>
-              <div className={styles.descriptionContainer}>{description} </div>
+              <div className={styles.descriptionContainer}>
+                <Typography className={styles.descriptionTitle}>
+                  Descripción
+                </Typography>
+                <Typography className={styles.description}>
+                  {description}{' '}
+                </Typography>
+              </div>
             </div>
+          </div>
+          <div className={`${styles.leftColumn} ${styles.reviewsContainer}`}>
+            <Typography className={styles.descriptionTitle}>
+              Comentarios
+            </Typography>
+            {reviews.map(
+              ({
+                description: reviewDescription,
+                stars,
+                userId: reviewerId
+              }) => (
+                <Comment
+                  key={userId}
+                  userId={reviewerId}
+                  stars={stars}
+                  comment={reviewDescription}
+                />
+              )
+            )}
+            {!reviews.length && (
+              <Typography>No hay comentarios para esta publicación</Typography>
+            )}
           </div>
           {!userId ? (
             <SesionModal open={handleOpenModal} onClose={handleCloseModal} />
