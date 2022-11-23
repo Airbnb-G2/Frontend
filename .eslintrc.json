@@ -31,6 +31,7 @@
     "implicit-arrow-linebreak": "off",
     "react/jsx-one-expression-per-line": "off",
     "object-curly-newline": "off",
-    "react/no-array-index-key": "off"
+    "react/no-array-index-key": "off",
+    "comma-dangle": "off"
   }
 }

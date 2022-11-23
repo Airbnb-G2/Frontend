@@ -33,3 +33,8 @@ export const AMENITIES = [
 ];
 
 export const PUBLICATION_TYPES = ['Departamento', 'Casa', 'Cabaña'];
+
+export const REVIEW_TYPE = {
+  RENTAL: 'rental',
+  USER: 'user',
+};
