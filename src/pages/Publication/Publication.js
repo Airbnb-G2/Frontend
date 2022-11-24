@@ -37,34 +37,27 @@ const Publication = () => {
     amenities,
     description,
     hostId,
-    reservations
+    reservations,
   } = publication || {};
 
-  const getPublication = () => {
+  const getPublicationData = async () => {
     setLoading(true);
 
-    dbGet(`rental/${publicationId}`)
-      .then(({ rental }) => {
-        setPublication(rental);
-        setLoading(false);
-      })
-      .catch(({ data }) => console.error(data));
-  };
-
-  const getHostInfo = () => {
-    dbGet(`user/${hostId}`)
-      .then((res) => {
-        setHostUser(res);
-      })
-      .catch((err) => console.error(err));
-  };
-
-  const getReviews = () => {
-    dbGet(`review/${id}`, { type: REVIEW_TYPE.RENTAL })
-      .then((res) => {
-        setReviews(res);
-      })
-      .catch((err) => console.error(err));
+    try {
+      const rental = await dbGet(`rental/${publicationId}`);
+      const rentalInfo = rental.rental;
+      setPublication(rental.rental);
+      const hostInfo = await dbGet(`user/${rentalInfo.hostId}`);
+      setHostUser(hostInfo);
+      setLoading(false);
+      // TODO: when review endpoint works, move setloading to bottom
+      const reviewsInfo = await dbGet(`review/${rentalInfo.id}`, {
+        type: REVIEW_TYPE.RENTAL,
+      });
+      setReviews(reviewsInfo);
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   const getDisabledDates = () => {
@@ -87,16 +80,8 @@ const Publication = () => {
   };
 
   useEffect(() => {
-    getPublication();
+    getPublicationData();
   }, []);
-
-  useEffect(() => {
-    getHostInfo();
-  }, [hostId]);
-
-  useEffect(() => {
-    getReviews();
-  }, [id]);
 
   useEffect(() => {
     getDisabledDates();
@@ -166,22 +151,16 @@ const Publication = () => {
             </div>
           </div>
           <div className={`${styles.leftColumn} ${styles.reviewsContainer}`}>
-            <Typography className={styles.descriptionTitle}>
-              Comentarios
-            </Typography>
+            <Typography className={styles.descriptionTitle}>Comentarios</Typography>
             {reviews.map(
-              ({
-                description: reviewDescription,
-                stars,
-                userId: reviewerId
-              }) => (
+              ({ description: reviewDescription, stars, userId: reviewerId }) => (
                 <Comment
                   key={userId}
                   userId={reviewerId}
                   stars={stars}
                   comment={reviewDescription}
                 />
-              )
+              ),
             )}
             {!reviews.length && (
               <Typography>No hay comentarios para esta publicación</Typography>

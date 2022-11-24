@@ -2,10 +2,9 @@ import { makeStyles } from '@mui/styles';
 
 export const profileStyles = makeStyles((theme) => ({
   profilePicture: {
-    boxSizing: 'borderBox',
-    position: 'absolute',
-    width: '200px',
-    height: '200px',
+    width: 200,
+    height: 200,
+    borderRadius: '50%',
     /* [theme.breakpoints.down('tablet')]: {
       padding: 22,
     }, */
@@ -45,5 +44,42 @@ export const profileStyles = makeStyles((theme) => ({
   circularProgress: {
     alignSelf: 'center',
     marginTop: 81,
+  },
+  infoContainer: {
+    display: 'flex',
+    marginTop: 20,
+  },
+  buttonEditProfile: {
+    marginTop: 60,
+    textAlign: 'center',
+    borderRadius: 8,
+  },
+  formContainer: {
+    alignSelf: 'center',
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+    justifyContent: 'center',
+    width: 500,
+    rowGap: 20,
+    [theme.breakpoints.down('tablet')]: {
+      width: '100%',
+    },
+  },
+  formContainerContainer: {
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'center',
+    width: '100%',
+    padding: 43,
+    [theme.breakpoints.down('tablet')]: {
+      padding: 22,
+    },
+  },
+  buttonsContainer: {
+    display: 'flex',
+    justifyContent: 'space-between',
+    marginTop: 140,
+    marginBottom: 60,
   },
 }));
