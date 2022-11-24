@@ -4,7 +4,7 @@ import { makeStyles } from '@mui/styles';
 export const imageUploaderStyles = makeStyles(theme => ({
   imageUploaderContainer: {
     width: '100%',
-    height: 350,
+    maxHeight: 350,
     display: 'flex',
     flexDirection: 'column',
     justifyContent: 'center',

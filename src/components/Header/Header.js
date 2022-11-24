@@ -1,12 +1,18 @@
 import React, { useState, useContext } from 'react';
-import { Box, Divider, Menu, MenuItem, Typography, useTheme } from '@mui/material';
+import {
+  Box,
+  Divider,
+  Menu,
+  MenuItem,
+  Typography,
+  useTheme
+} from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
 import { useNavigate } from 'react-router-dom';
 import SesionModal from '../SesionModal/SesionModal';
-import airbnbLogo from '../../assets/airbnbLogo.svg';
+import rentitiLogo from '../../assets/rentitLogo.svg';
 import { headerStyles } from './HeaderStyles';
 import { AuthContext } from '../../context/Auth';
-import LoginForm from '../LoginForm/LoginForm';
 
 const Header = () => {
   const styles = headerStyles();
@@ -49,9 +55,13 @@ const Header = () => {
     <>
       <Box className={styles.headerContainer}>
         <button type="button" onClick={() => navigate('/')}>
-          <img alt="logo" src={airbnbLogo} className={styles.logo} />
+          <img alt="logo" src={rentitiLogo} className={styles.logo} />
         </button>
-        <button type="button" onClick={handleHeaderButton} className={styles.menuButton}>
+        <button
+          type="button"
+          onClick={handleHeaderButton}
+          className={styles.menuButton}
+        >
           {authState.isLoggedIn ? (
             <MenuIcon className={styles.menuIcon} />
           ) : (

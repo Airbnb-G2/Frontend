@@ -5,9 +5,7 @@ export const profileStyles = makeStyles((theme) => ({
     width: 200,
     height: 200,
     borderRadius: '50%',
-    /* [theme.breakpoints.down('tablet')]: {
-      padding: 22,
-    }, */
+    objectFit: 'cover'
   },
   titleContainer: {
     display: 'flex',
@@ -15,20 +13,20 @@ export const profileStyles = makeStyles((theme) => ({
     rowGap: 22,
     alignItems: 'center',
     [theme.breakpoints.down('tablet')]: {
-      flexDirection: 'column',
-    },
+      flexDirection: 'column'
+    }
   },
 
   profileInfoContainer: {
     display: 'flex',
     flexDirection: 'column',
     alignSelf: 'center',
-    rowGap: 20,
+    rowGap: 20
   },
 
   publicationsGrid: {
     justifyContent: 'center',
-    marginTop: '0px',
+    marginTop: '0px'
   },
   noPublicationsText: {
     color: theme.palette.grey[400],
@@ -38,21 +36,21 @@ export const profileStyles = makeStyles((theme) => ({
     textAlign: 'center',
     marginTop: 87,
     [theme.breakpoints.down('tablet')]: {
-      fontSize: 24,
-    },
+      fontSize: 24
+    }
   },
   circularProgress: {
     alignSelf: 'center',
-    marginTop: 81,
+    marginTop: 81
   },
   infoContainer: {
     display: 'flex',
-    marginTop: 20,
+    marginTop: 20
   },
   buttonEditProfile: {
     marginTop: 60,
     textAlign: 'center',
-    borderRadius: 8,
+    borderRadius: 8
   },
   formContainer: {
     alignSelf: 'center',
@@ -63,8 +61,8 @@ export const profileStyles = makeStyles((theme) => ({
     width: 500,
     rowGap: 20,
     [theme.breakpoints.down('tablet')]: {
-      width: '100%',
-    },
+      width: '100%'
+    }
   },
   formContainerContainer: {
     display: 'flex',
@@ -73,13 +71,13 @@ export const profileStyles = makeStyles((theme) => ({
     width: '100%',
     padding: 43,
     [theme.breakpoints.down('tablet')]: {
-      padding: 22,
-    },
+      padding: 22
+    }
   },
   buttonsContainer: {
     display: 'flex',
     justifyContent: 'space-between',
     marginTop: 20,
-    marginBottom: 60,
-  },
+    marginBottom: 60
+  }
 }));

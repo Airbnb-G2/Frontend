@@ -5,8 +5,8 @@ import React, { useEffect } from 'react';
 import { useImageUploader } from '../../hooks/useImageUploader';
 import { imageUploaderStyles } from './ImageUploaderStyles';
 
-const ImageUploader = ({ onChange, title }) => {
-  const { uploadImage, imageUrls } = useImageUploader();
+const ImageUploader = ({ onChange, title, multiple = false, buttonLabel }) => {
+  const { uploadImage, imageUrls } = useImageUploader(multiple);
   useEffect(() => {
     onChange(imageUrls);
   }, [imageUrls]);
@@ -30,9 +30,14 @@ const ImageUploader = ({ onChange, title }) => {
         </div>
       )}
       <label htmlFor="file-upload" className={styles.button}>
-        SUBIR IMAGENES
+        {buttonLabel || 'SUBIR IMAGENES'}
       </label>
-      <input id="file-upload" type="file" multiple onChange={uploadImage} />
+      <input
+        id="file-upload"
+        type="file"
+        multiple={multiple}
+        onChange={uploadImage}
+      />
     </div>
   );
 };
