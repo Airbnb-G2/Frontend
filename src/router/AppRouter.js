@@ -2,8 +2,8 @@ import React from 'react';
 import { Routes, Route, BrowserRouter, Navigate } from 'react-router-dom';
 import Header from '../components/Header/Header';
 import CreatePublication from '../pages/CreatePublication/CreatePublication';
+import EditProfile from '../pages/EditProfile/EditProfile';
 import Home from '../pages/Home/Home';
-import EditProfile from '../pages/Profile/EditProfile';
 import Profile from '../pages/Profile/Profile';
 import Publication from '../pages/Publication/Publication';
 

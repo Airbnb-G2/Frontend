@@ -176,7 +176,7 @@ const CreatePublicationForm = () => {
         maxRows={4}
         onChange={handleInputChange}
       />
-      <ImageUploader onChange={setImages} />
+      <ImageUploader onChange={setImages} multiple />
       <div className={styles.buttonsContainer}>
         <Button onClick={handleCancel}>Cancelar</Button>
         <Button onClick={handleSubmit} variant="contained">
