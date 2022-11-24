@@ -21,7 +21,6 @@ const Profile = (props) => {
       })
       .catch((err) => console.error(err));
   };
-  console.log('profileInfo', profileInfo);
 
   useEffect(() => {
     fetchUserData();
@@ -29,9 +28,9 @@ const Profile = (props) => {
 
   return (
     <Stack alignItems="center" mt={5} spacing={1}>
-      {userInfo.profile_url ? (
+      {profileInfo.profile_url ? (
         <img
-          src={userInfo.profile_url}
+          src={profileInfo.profile_url}
           alt="profile"
           className={styles.profilePicture}
         />

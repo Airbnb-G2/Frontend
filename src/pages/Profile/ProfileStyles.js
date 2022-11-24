@@ -79,7 +79,7 @@ export const profileStyles = makeStyles((theme) => ({
   buttonsContainer: {
     display: 'flex',
     justifyContent: 'space-between',
-    marginTop: 140,
+    marginTop: 20,
     marginBottom: 60,
   },
 }));

@@ -36,7 +36,10 @@ const EditProfile = (props) => {
   };
 
   const handleSubmit = () => {
-    dbPut(`user/${id}`, { ...formState, images })
+    dbPut(`user/${id}`, {
+      ...formState,
+      profile_url: images.length > 0 ? images[0] : null,
+    })
       .then((res) => {
         setOpenSnackbar(true);
         setTimeout(() => {
@@ -106,29 +109,39 @@ const EditProfile = (props) => {
             flexDirection: 'column',
             alignItems: 'center',
             width: '30%',
-            height: 40,
             pt: 3,
           }}
         >
           <ImageUploader onChange={setImages} title="Imagen de perfil" />
         </Grid>
 
-        <Stack direction="row" spacing={6} className={styles.buttonsContainer}>
+        <Grid
+          item
+          xs={12}
+          md={12}
+          sx={{
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+            columnGap: 8,
+            width: '30%',
+            pt: 3,
+          }}
+        >
           <Button color="secondary" onClick={handleCancel}>
             Cancelar
           </Button>
           <Button variant="contained" onClick={handleSubmit}>
             Guardar
           </Button>
-        </Stack>
-
-        <Snackbar
-          open={openSnackbar}
-          autoHideDuration={1500}
-          message="El usuario se ha actualizado correctamente"
-          severity="success"
-        />
+        </Grid>
       </Grid>
+      <Snackbar
+        open={openSnackbar}
+        autoHideDuration={1500}
+        message="El usuario se ha actualizado correctamente"
+        severity="success"
+      />
     </Box>
   );
 };
