@@ -7,8 +7,6 @@ import EditProfile from '../pages/Profile/EditProfile';
 import Profile from '../pages/Profile/Profile';
 import Publication from '../pages/Publication/Publication';
 
-const userIsLogged = false;
-
 const AppRouter = () => (
   <BrowserRouter>
     <Header />

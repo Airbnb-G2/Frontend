@@ -17,7 +17,6 @@ const Profile = (props) => {
     dbGet(`user/${+params.userId}`)
       .then((res) => {
         setProfileInfo(res);
-        console.log(res);
       })
       .catch((err) => console.error(err));
   };
@@ -95,7 +94,8 @@ const Profile = (props) => {
               variant="contained"
               color="primary"
               onClick={() =>
-                navigate('/edit-profile', { state: { user: profileInfo } })}
+                navigate('/edit-profile', { state: { user: profileInfo } })
+              }
               size="large"
               className={styles.buttonEditProfile}
             >
