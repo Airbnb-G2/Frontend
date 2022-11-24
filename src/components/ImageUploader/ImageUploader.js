@@ -5,7 +5,7 @@ import React, { useEffect } from 'react';
 import { useImageUploader } from '../../hooks/useImageUploader';
 import { imageUploaderStyles } from './ImageUploaderStyles';
 
-const ImageUploader = ({ onChange }) => {
+const ImageUploader = ({ onChange, title }) => {
   const { uploadImage, imageUrls } = useImageUploader();
   useEffect(() => {
     onChange(imageUrls);
@@ -15,20 +15,20 @@ const ImageUploader = ({ onChange }) => {
 
   return (
     <div className={styles.imageUploaderContainer}>
-      {!imageUrls.length ? <Typography> Seleccione las imagenes</Typography>
-        : (
-          <div className={styles.imagesContainer}>
-            {imageUrls.map((url, index) => (
-              <img
-                className={styles.image}
-                key={`${url} + ${index}`}
-                alt="publicationImage"
-                src={url}
-              />
-            ),
-            )}
-          </div>
-        ) }
+      {!imageUrls.length ? (
+        <Typography> {title || 'Seleccione las imagenes'}</Typography>
+      ) : (
+        <div className={styles.imagesContainer}>
+          {imageUrls.map((url, index) => (
+            <img
+              className={styles.image}
+              key={`${url} + ${index}`}
+              alt="publicationImage"
+              src={url}
+            />
+          ))}
+        </div>
+      )}
       <label htmlFor="file-upload" className={styles.button}>
         SUBIR IMAGENES
       </label>
