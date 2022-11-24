@@ -1,14 +1,10 @@
 import React from 'react';
-import {
-  Routes, Route, BrowserRouter, Navigate,
-} from 'react-router-dom';
+import { Routes, Route, BrowserRouter, Navigate } from 'react-router-dom';
 import Header from '../components/Header/Header';
 import CreatePublication from '../pages/CreatePublication/CreatePublication';
 import Home from '../pages/Home/Home';
 import Profile from '../pages/Profile/Profile';
 import Publication from '../pages/Publication/Publication';
-
-const userIsLogged = false;
 
 const AppRouter = () => (
   <BrowserRouter>
