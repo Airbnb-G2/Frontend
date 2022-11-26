@@ -1,8 +1,8 @@
-import React, { useEffect, useState } from 'react';
-import { Button, Rating, Typography } from '@mui/material';
-import { commentStyles } from './CommentStyles';
-import UserTitle from '../UserTitle/UserTitle';
-import { dbGet } from '../../utils/db';
+import React, { useEffect, useState } from "react";
+import { Rating, Typography } from "@mui/material";
+import { commentStyles } from "./CommentStyles";
+import UserTitle from "../UserTitle/UserTitle";
+import { dbGet } from "../../utils/db";
 
 const Comment = ({ comment, stars, userId }) => {
   const [user, setUser] = useState({});

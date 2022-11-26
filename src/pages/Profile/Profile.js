@@ -1,75 +1,85 @@
-import React, { useContext, useEffect, useState } from 'react';
-import { Box, Button, Grid, Typography } from '@mui/material';
-import { Stack } from '@mui/material/index';
-import { useNavigate, useParams } from 'react-router-dom';
-import { dbGet } from '../../utils/db';
-import { AuthContext } from '../../context/Auth';
-import { profileStyles } from './ProfileStyles';
-import ProfilePic from '../../assets/profilePic.svg';
+import React, { useContext, useEffect, useState } from "react";
+import { Box, Button, Grid, Typography } from "@mui/material";
+import { Stack } from "@mui/material/index";
+import { useNavigate, useParams } from "react-router-dom";
+import { dbGet } from "../../utils/db";
+import { AuthContext } from "../../context/Auth";
+import { profileStyles } from "./ProfileStyles";
+import ProfilePic from "../../assets/profilePic.svg";
+import Comment from "../../components/Comment/Comment";
+import ReviewsList from "../../components/CommentsList/ReviewsList";
 
 const Profile = (props) => {
   const styles = profileStyles();
   const { userInfo } = useContext(AuthContext);
-  const [profileInfo, setProfileInfo] = useState({});
-  const params = useParams();
+  const { userId } = useParams();
+  const isOtherUser = userInfo.id !== parseInt(userId, 10);
+  const [profileInfo, setProfileInfo] = useState(userInfo);
+  const [reviews, setReviews] = useState([]);
   const navigate = useNavigate();
 
-  const fetchUserData = async () => {
-    dbGet(`user/${+params.userId}`)
+  const getUserInfo = async () => {
+    dbGet(`user/${userId}`)
       .then((res) => {
         setProfileInfo(res);
       })
       .catch((err) => console.error(err));
   };
 
+  const getReviews = async () => {
+    const { items } = await dbGet("review", {
+      otherUserId: userId,
+    });
+    setReviews(items);
+  };
+
+  const { profile_url, firstname, lastname, mail, phone, country } = profileInfo;
+
   useEffect(() => {
-    fetchUserData();
+    if (isOtherUser) {
+      getUserInfo();
+      getReviews();
+    }
   }, []);
 
   return (
-    <Stack alignItems="center" mt={5} spacing={1}>
-      <img
-        src={profileInfo.profile_url || ProfilePic}
-        alt="profilePic"
-        className={styles.profilePicture}
-      />
-      <Stack alignItems="center" justifyContent="center">
-        <Grid
-          container
-          direction="column"
-          alignItems="center"
-          justifyContent="center"
-        >
-          <Typography className={styles.infoContainer} variant="h4">
-            {`${profileInfo.firstname} ${profileInfo.lastname}`}
+    <div className={styles.pageContainer}>
+      <img src={profile_url || ProfilePic} alt="profilePic" className={styles.profilePicture} />
+      <Typography variant="h3">{`${firstname} ${lastname}`}</Typography>
+      <Stack alignItems="left" spacing={2}>
+        {mail && !isOtherUser && (
+          <Typography color="grey.500" variant="h5">
+            Email: {mail}
           </Typography>
-          {userInfo.id === +params.userId && (
-            <>
-              <Typography className={styles.infoContainer} color="grey.600">
-                {profileInfo.mail}
-              </Typography>
-              <Typography className={styles.infoContainer} color="grey.600">
-                Teléfono: {profileInfo.phone}
-              </Typography>
-            </>
-          )}
-          <Typography className={styles.infoContainer} color="grey.600">
-            País: {profileInfo.country}
+        )}
+        {phone && !isOtherUser && (
+          <Typography color="grey.500" variant="h5">
+            Télefono: {phone}
           </Typography>
-          {userInfo.id === +params.userId && (
-            <Button
-              variant="contained"
-              color="primary"
-              onClick={() => navigate('/edit-profile')}
-              size="large"
-              className={styles.buttonEditProfile}
-            >
-              Editar perfil
-            </Button>
-          )}
-        </Grid>
+        )}
+        {country && !isOtherUser && (
+          <Typography color="grey.500" variant="h5">
+            País: {country}
+          </Typography>
+        )}
       </Stack>
-    </Stack>
+      {isOtherUser && (
+        <ReviewsList
+          reviews={reviews}
+          noReviewsMessage="No hay comentarios para este usuario todavía"
+        />
+      )}
+      {!isOtherUser && (
+        <Button
+          variant="contained"
+          color="primary"
+          onClick={() => navigate("/edit-profile")}
+          size="large"
+        >
+          Editar perfil
+        </Button>
+      )}
+    </div>
   );
 };
 

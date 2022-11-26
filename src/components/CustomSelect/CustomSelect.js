@@ -1,5 +1,5 @@
-import { FormControl, InputLabel, OutlinedInput, Select } from '@mui/material';
-import React from 'react';
+import { FormControl, InputLabel, OutlinedInput, Select } from "@mui/material";
+import React from "react";
 
 const CustomSelect = ({ label, children, halfwidth, ...props }) => (
   <FormControl fullWidth>
