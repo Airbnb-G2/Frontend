@@ -7,6 +7,7 @@ export const userTitle = makeStyles((theme) => ({
     columnGap: 10,
     textDecoration: "none",
     color: theme.palette.grey[800],
+    width: "max-content",
   },
   name: {
     fontFamily: theme.typography.fontFamily,

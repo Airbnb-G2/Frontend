@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import { useParams } from "react-router-dom";
 import Carousel from "react-material-ui-carousel";
 import { Button, Chip, CircularProgress, Typography } from "@mui/material";
@@ -8,11 +8,12 @@ import { publicationStyles } from "./PublicationStyles";
 import ReservationModal from "../../components/ReservationModal/ReservationModal";
 import { AuthContext } from "../../context/Auth";
 import SesionModal from "../../components/SesionModal/SesionModal";
-import { getDatesInRange } from "../../utils/utils";
-import Comment from "../../components/Comment/Comment";
+import { formatDate, getDisabledDates } from "../../utils/utils";
 import UserTitle from "../../components/UserTitle/UserTitle";
-import { REVIEW_TYPE } from "../../constants";
 import ReviewsList from "../../components/CommentsList/ReviewsList";
+import ReviewModal from "../../components/ReviewModal/ReviewModal";
+
+const CURRENT_DATE = new Date();
 
 const Publication = () => {
   const styles = publicationStyles();
@@ -20,14 +21,19 @@ const Publication = () => {
   const { publicationId } = useParams();
   const [publication, setPublication] = useState({});
   const [handleOpenModal, setOpenReservationModal] = useState(false);
-  const { userInfo } = useContext(AuthContext);
+  const [lastReservationId, setLastReservationId] = useState();
+  const {
+    userInfo,
+    authState: { isLoggedIn },
+  } = useContext(AuthContext);
   const [disabledDates, setDisabledDates] = useState();
   const [hostUser, setHostUser] = useState({});
   const [reviews, setReviews] = useState([]);
+  const canReserve = useRef(true);
+  const [openReviewModal, setOpenReviewModal] = useState(false);
   const { id: userId } = userInfo;
 
   const {
-    id,
     title,
     images,
     pricePerNight,
@@ -47,27 +53,30 @@ const Publication = () => {
     try {
       const { rental } = await dbGet(`rental/${publicationId}`);
       const hostInfo = await dbGet(`user/${rental.hostId}`);
-      const { items } = await dbGet("review", {
+      const { items: reviewsData } = await dbGet("review", {
         rentalId: rental.id,
       });
+      setDisabledDates(getDisabledDates(rental.reservations));
       setHostUser(hostInfo);
       setPublication(rental);
-      setReviews(items);
+      setReviews(reviewsData);
       setLoading(false);
     } catch (error) {
       console.error(error);
     }
   };
 
-  const getDisabledDates = () => {
-    let dates = [];
-
-    if (!reservations?.length) return;
-
-    reservations.forEach(({ fromDate, toDate }) => {
-      dates = dates.concat(getDatesInRange(fromDate, toDate));
+  const getLoggedUserReservations = async () => {
+    const { items: reservationsData } = await dbGet("reservation", {
+      rentalId: publicationId,
+      guestId: userId,
     });
-    setDisabledDates([...new Set(dates.flat())]);
+    if (reservationsData.length) {
+      const { toDate, leftReview, id } = reservationsData.slice(-1)[0];
+      setLastReservationId(id);
+      canReserve.current = formatDate(toDate) <= formatDate(CURRENT_DATE);
+      setOpenReviewModal(canReserve.current && !leftReview);
+    }
   };
 
   const handleReservation = () => {
@@ -83,8 +92,12 @@ const Publication = () => {
   }, []);
 
   useEffect(() => {
-    getDisabledDates();
+    getDisabledDates(reservations);
   }, [reservations]);
+
+  useEffect(() => {
+    if (isLoggedIn) getLoggedUserReservations();
+  }, [isLoggedIn]);
 
   return (
     <div className={styles.publicationContainer}>
@@ -104,7 +117,7 @@ const Publication = () => {
             <div className={styles.rightColumn}>
               <div className={styles.priceContainer}>
                 <Typography className={styles.pricePerNight}>$ARS {pricePerNight}</Typography>
-                {userId !== hostId && (
+                {userId !== hostId && canReserve.current && (
                   <Button onClick={handleReservation} variant="contained" color="primary">
                     Reservar
                   </Button>
@@ -136,12 +149,23 @@ const Publication = () => {
           {!userId ? (
             <SesionModal open={handleOpenModal} onClose={handleCloseModal} />
           ) : (
-            <ReservationModal
-              open={handleOpenModal}
-              onClose={handleCloseModal}
-              disabledDates={disabledDates}
-              publicationId={publicationId}
-            />
+            <>
+              <ReservationModal
+                open={handleOpenModal}
+                onClose={handleCloseModal}
+                disabledDates={disabledDates}
+                publicationId={publicationId}
+              />
+              <ReviewModal
+                publicationTitle={title}
+                hostFullName={`${hostUser.firstname} ${hostUser.lastname}`}
+                userId={userId}
+                rentalId={publicationId}
+                otherUserId={hostId}
+                open={openReviewModal}
+                reservationId={lastReservationId}
+              />
+            </>
           )}
         </>
       )}
