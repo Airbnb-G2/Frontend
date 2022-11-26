@@ -1,13 +1,13 @@
-import React, { useContext, useEffect, useState } from 'react';
-import { CircularProgress, Divider, Grid, Typography } from '@mui/material';
-import { useLocation, useNavigate } from 'react-router-dom';
-import queryString from 'query-string';
-import CustomButton from '../../components/CustomButton/CustomButton';
-import PublicationCard from '../../components/PublicationCard/PublicationCard';
-import { homeStyles } from './HomeStyles';
-import { dbGet } from '../../utils/db';
-import { AuthContext } from '../../context/Auth';
-import Searcher from '../../components/Searcher/Searcher';
+import React, { useContext, useEffect, useState } from "react";
+import { CircularProgress, Divider, Grid, Typography } from "@mui/material";
+import { useLocation, useNavigate } from "react-router-dom";
+import queryString from "query-string";
+import CustomButton from "../../components/CustomButton/CustomButton";
+import PublicationCard from "../../components/PublicationCard/PublicationCard";
+import { homeStyles } from "./HomeStyles";
+import { dbGet } from "../../utils/db";
+import { AuthContext } from "../../context/Auth";
+import Searcher from "../../components/Searcher/Searcher";
 
 const Home = () => {
   const styles = homeStyles();
@@ -20,15 +20,15 @@ const Home = () => {
   const { role, id: userId } = userInfo;
   const search = queryString.parse(location.search);
 
-  const isHost = role === 'host';
+  const isHost = role === "host";
 
   const handleCreatePublicationButton = () => {
-    navigate('/create-publication');
+    navigate("/create-publication");
   };
 
   const getPublications = () => {
     setLoading(true);
-    dbGet(isHost ? `${userId}/rental` : 'rental', search)
+    dbGet(isHost ? `${userId}/rental` : "rental", search)
       .then(({ items }) => {
         setPublications(items);
         setLoading(false);
@@ -49,7 +49,7 @@ const Home = () => {
       {!isHost && <Searcher />}
       <div className={styles.titleContainer}>
         <Typography className={styles.title}>
-          {isHost ? 'Tus publicaciones' : 'Publicaciones destacadas'}
+          {isHost ? "Tus publicaciones" : "Publicaciones destacadas"}
         </Typography>
         {isHost && (
           <CustomButton onClick={handleCreatePublicationButton}>
