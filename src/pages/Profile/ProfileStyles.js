@@ -16,5 +16,6 @@ export const profileStyles = makeStyles((theme) => ({
     height: 200,
     borderRadius: "50%",
     objectFit: "cover",
+    border: `3px solid ${theme.palette.primary.main}`,
   },
 }));

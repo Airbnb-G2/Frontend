@@ -131,7 +131,7 @@ const Publication = () => {
           </div>
           <ReviewsList
             reviews={reviews}
-            reviewsContainer="No hay comentarios para esta publicación"
+            noReviewsMessage="No hay comentarios para esta publicación"
           />
           {!userId ? (
             <SesionModal open={handleOpenModal} onClose={handleCloseModal} />
