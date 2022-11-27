@@ -6,7 +6,10 @@ export const publicationStyles = makeStyles((theme) => ({
     flexDirection: "column",
     padding: 43,
     rowGap: 30,
+    maxWidth: 1200,
+    margin: "0 auto",
     [theme.breakpoints.down("tablet")]: {
+      margin: 0,
       padding: 22,
     },
   },
@@ -16,6 +19,7 @@ export const publicationStyles = makeStyles((theme) => ({
     height: "min-content",
     [theme.breakpoints.down("desktop")]: {
       flexDirection: "column",
+      rowGap: 20,
     },
   },
   leftColumn: {
@@ -76,7 +80,12 @@ export const publicationStyles = makeStyles((theme) => ({
     "-webkit-box-orient": "vertical",
   },
   image: {
-    objectFit: "cover",
+    objectFit: "fill",
+    [theme.breakpoints.down("desktop")]: {
+      objectFit: "contain",
+      margin: "0 auto",
+      maxHeight: 500,
+    },
   },
   loader: {
     margin: "0 auto",

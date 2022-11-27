@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import { useParams } from "react-router-dom";
 import Carousel from "react-material-ui-carousel";
 import { Button, Chip, CircularProgress, Typography } from "@mui/material";
@@ -8,26 +8,32 @@ import { publicationStyles } from "./PublicationStyles";
 import ReservationModal from "../../components/ReservationModal/ReservationModal";
 import { AuthContext } from "../../context/Auth";
 import SesionModal from "../../components/SesionModal/SesionModal";
-import { getDatesInRange } from "../../utils/utils";
-import Comment from "../../components/Comment/Comment";
+import { formatDate, formatPrice, getDisabledDates } from "../../utils/utils";
 import UserTitle from "../../components/UserTitle/UserTitle";
-import { REVIEW_TYPE } from "../../constants";
-import ReviewsList from "../../components/CommentsList/ReviewsList";
+import ReviewsList from "../../components/ReviewsList/ReviewsList";
+import ReviewModal from "../../components/ReviewModal/ReviewModal";
+
+const CURRENT_DATE = new Date();
 
 const Publication = () => {
   const styles = publicationStyles();
   const [loading, setLoading] = useState(true);
-  const { publicationId } = useParams();
+  const rentalId = parseInt(useParams().rentalId, 10);
+
   const [publication, setPublication] = useState({});
   const [handleOpenModal, setOpenReservationModal] = useState(false);
-  const { userInfo } = useContext(AuthContext);
-  const [disabledDates, setDisabledDates] = useState();
-  const [hostUser, setHostUser] = useState({});
-  const [reviews, setReviews] = useState([]);
-  const { id: userId } = userInfo;
+  const [lastReservationId, setLastReservationId] = useState();
+  const {
+    userInfo,
+    authState: { isLoggedIn },
+  } = useContext(AuthContext);
+  const disabledDates = useRef([]);
+  const canReserve = useRef(true);
+  const hostUser = useRef({});
+  const [openReviewModal, setOpenReviewModal] = useState(false);
+  const userId = userInfo.id;
 
   const {
-    id,
     title,
     images,
     pricePerNight,
@@ -38,36 +44,38 @@ const Publication = () => {
     amenities,
     description,
     hostId,
-    reservations,
+    reviews,
   } = publication || {};
 
   const getPublicationData = async () => {
     setLoading(true);
 
     try {
-      const { rental } = await dbGet(`rental/${publicationId}`);
+      const { rental } = await dbGet(`rental/${rentalId}`);
       const hostInfo = await dbGet(`user/${rental.hostId}`);
       const { items } = await dbGet("review", {
         rentalId: rental.id,
       });
-      setHostUser(hostInfo);
-      setPublication(rental);
-      setReviews(items);
+      disabledDates.current = getDisabledDates(rental.reservations);
+      hostUser.current = hostInfo;
+      setPublication({ ...rental, reviews: items });
       setLoading(false);
     } catch (error) {
       console.error(error);
     }
   };
 
-  const getDisabledDates = () => {
-    let dates = [];
-
-    if (!reservations?.length) return;
-
-    reservations.forEach(({ fromDate, toDate }) => {
-      dates = dates.concat(getDatesInRange(fromDate, toDate));
+  const getLoggedUserReservations = async () => {
+    const { items: reservationsData } = await dbGet("reservation", {
+      rentalId,
+      guestId: userId,
     });
-    setDisabledDates([...new Set(dates.flat())]);
+    if (reservationsData.length) {
+      const { toDate, leftReview, id } = reservationsData.slice(-1)[0];
+      setLastReservationId(id);
+      canReserve.current = formatDate(toDate) <= formatDate(CURRENT_DATE) && userId !== hostId;
+      setOpenReviewModal(canReserve.current && !leftReview);
+    }
   };
 
   const handleReservation = () => {
@@ -83,8 +91,8 @@ const Publication = () => {
   }, []);
 
   useEffect(() => {
-    getDisabledDates();
-  }, [reservations]);
+    if (isLoggedIn && userId) getLoggedUserReservations();
+  }, [isLoggedIn]);
 
   return (
     <div className={styles.publicationContainer}>
@@ -95,7 +103,7 @@ const Publication = () => {
           <Typography className={styles.title}>{title}</Typography>
           <div className={styles.columnsContainer}>
             <div className={styles.leftColumn}>
-              <Carousel className={styles.carouselContainer}>
+              <Carousel className={styles.carouselContainer} navButtonsAlwaysVisible>
                 {images?.map((image, index) => (
                   <img className={styles.image} key={index} src={image} alt={image} />
                 ))}
@@ -103,14 +111,21 @@ const Publication = () => {
             </div>
             <div className={styles.rightColumn}>
               <div className={styles.priceContainer}>
-                <Typography className={styles.pricePerNight}>$ARS {pricePerNight}</Typography>
-                {userId !== hostId && (
-                  <Button onClick={handleReservation} variant="contained" color="primary">
+                <Typography className={styles.pricePerNight}>
+                  $ARS {formatPrice(pricePerNight)}
+                </Typography>
+                {canReserve.current && (
+                  <Button
+                    onClick={handleReservation}
+                    variant="contained"
+                    size="large"
+                    color="primary"
+                  >
                     Reservar
                   </Button>
                 )}
               </div>
-              <UserTitle user={hostUser} />
+              <UserTitle user={hostUser.current} />
               <Typography className={styles.location}>
                 <LocationOn color="primary" />
                 {address && `${address}, `}
@@ -136,12 +151,24 @@ const Publication = () => {
           {!userId ? (
             <SesionModal open={handleOpenModal} onClose={handleCloseModal} />
           ) : (
-            <ReservationModal
-              open={handleOpenModal}
-              onClose={handleCloseModal}
-              disabledDates={disabledDates}
-              publicationId={publicationId}
-            />
+            <>
+              <ReservationModal
+                open={handleOpenModal}
+                onClose={handleCloseModal}
+                disabledDates={disabledDates.current}
+                rentalId={rentalId}
+                pricePerNight={pricePerNight}
+              />
+              <ReviewModal
+                publicationTitle={title}
+                hostFullName={`${hostUser.current.firstname} ${hostUser.current.lastname}`}
+                userId={userId}
+                rentalId={rentalId}
+                otherUserId={hostId}
+                open={openReviewModal}
+                reservationId={lastReservationId}
+              />
+            </>
           )}
         </>
       )}
