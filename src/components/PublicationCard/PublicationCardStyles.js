@@ -1,32 +1,35 @@
-import { alpha } from '@mui/material';
-import { makeStyles } from '@mui/styles';
+import { alpha } from "@mui/material";
+import { makeStyles } from "@mui/styles";
 
 export const publicationCardStyles = makeStyles((theme) => ({
   cardPaper: {
     width: 320,
     height: 442,
     borderRadius: 10,
-    overflow: 'hidden',
+    overflow: "hidden",
+    display: "flex",
+    flexDirection: "column",
   },
   cardContent: {
-    display: 'flex',
-    flexDirection: 'column',
+    display: "flex",
+    flexDirection: "column",
     rowGap: 5,
-    justifyContent: 'start',
-    alignItems: 'start',
+    flex: 1,
+    justifyContent: "space-between",
+    alignItems: "start",
     padding: 10,
   },
   description: {
-    textAlign: 'left',
+    textAlign: "left",
     fontSize: 14,
-    overflow: 'hidden',
-    textOverflow: 'ellipsis',
-    display: '-webkit-box',
+    overflow: "hidden",
+    textOverflow: "ellipsis",
+    display: "-webkit-box",
     lineClamp: 3,
-    '-webkit-box-orient': 'vertical',
+    "-webkit-box-orient": "vertical",
   },
   image: {
-    width: '100%',
+    width: "100%",
     height: 206,
   },
   title: {
