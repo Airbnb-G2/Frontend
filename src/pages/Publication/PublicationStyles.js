@@ -80,11 +80,13 @@ export const publicationStyles = makeStyles((theme) => ({
     "-webkit-box-orient": "vertical",
   },
   image: {
-    objectFit: "fill",
+    objectFit: "cover",
+    height: 500,
+    margin: "0 auto",
     [theme.breakpoints.down("desktop")]: {
       objectFit: "contain",
       margin: "0 auto",
-      maxHeight: 500,
+      height: 500,
     },
   },
   loader: {
