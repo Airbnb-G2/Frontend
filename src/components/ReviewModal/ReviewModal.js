@@ -63,12 +63,13 @@ const ReviewModal = ({
       await dbPut(`reservation/${reservationId}`, {
         leftReview: true,
       });
+      setCloseModal(true);
     }
   };
 
   return (
     <Dialog onClose={handleCancel} open={open && !closeModal}>
-      <DialogTitle>
+      <DialogTitle sx={{ width: 300, textAlign: "center" }}>
         {publicationReviewFinish
           ? `¿Cómo calificarias a ${hostFullName}?`
           : `¿Cómo fue tu estadia en ${publicationTitle}?`}
@@ -90,7 +91,7 @@ const ReviewModal = ({
             name={publicationReviewFinish ? "userReview" : "publicationReview"}
             label="Reseña"
             variant="outlined"
-            value={formState.review}
+            value={publicationReviewFinish ? formState.userReview : formState.publicationReview}
             multiline
             maxRows={3}
             onChange={handleInputChange}

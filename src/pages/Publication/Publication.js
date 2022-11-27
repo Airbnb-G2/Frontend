@@ -8,9 +8,9 @@ import { publicationStyles } from "./PublicationStyles";
 import ReservationModal from "../../components/ReservationModal/ReservationModal";
 import { AuthContext } from "../../context/Auth";
 import SesionModal from "../../components/SesionModal/SesionModal";
-import { formatDate, getDisabledDates } from "../../utils/utils";
+import { formatDate, formatPrice, getDisabledDates } from "../../utils/utils";
 import UserTitle from "../../components/UserTitle/UserTitle";
-import ReviewsList from "../../components/CommentsList/ReviewsList";
+import ReviewsList from "../../components/ReviewsList/ReviewsList";
 import ReviewModal from "../../components/ReviewModal/ReviewModal";
 
 const CURRENT_DATE = new Date();
@@ -18,7 +18,8 @@ const CURRENT_DATE = new Date();
 const Publication = () => {
   const styles = publicationStyles();
   const [loading, setLoading] = useState(true);
-  const { publicationId } = useParams();
+  const rentalId = parseInt(useParams().rentalId, 10);
+
   const [publication, setPublication] = useState({});
   const [handleOpenModal, setOpenReservationModal] = useState(false);
   const [lastReservationId, setLastReservationId] = useState();
@@ -26,12 +27,11 @@ const Publication = () => {
     userInfo,
     authState: { isLoggedIn },
   } = useContext(AuthContext);
-  const [disabledDates, setDisabledDates] = useState();
-  const [hostUser, setHostUser] = useState({});
-  const [reviews, setReviews] = useState([]);
+  const disabledDates = useRef([]);
   const canReserve = useRef(true);
+  const hostUser = useRef({});
   const [openReviewModal, setOpenReviewModal] = useState(false);
-  const { id: userId } = userInfo;
+  const userId = userInfo.id;
 
   const {
     title,
@@ -44,22 +44,21 @@ const Publication = () => {
     amenities,
     description,
     hostId,
-    reservations,
+    reviews,
   } = publication || {};
 
   const getPublicationData = async () => {
     setLoading(true);
 
     try {
-      const { rental } = await dbGet(`rental/${publicationId}`);
+      const { rental } = await dbGet(`rental/${rentalId}`);
       const hostInfo = await dbGet(`user/${rental.hostId}`);
-      const { items: reviewsData } = await dbGet("review", {
+      const { items } = await dbGet("review", {
         rentalId: rental.id,
       });
-      setDisabledDates(getDisabledDates(rental.reservations));
-      setHostUser(hostInfo);
-      setPublication(rental);
-      setReviews(reviewsData);
+      disabledDates.current = getDisabledDates(rental.reservations);
+      hostUser.current = hostInfo;
+      setPublication({ ...rental, reviews: items });
       setLoading(false);
     } catch (error) {
       console.error(error);
@@ -68,13 +67,13 @@ const Publication = () => {
 
   const getLoggedUserReservations = async () => {
     const { items: reservationsData } = await dbGet("reservation", {
-      rentalId: publicationId,
+      rentalId,
       guestId: userId,
     });
     if (reservationsData.length) {
       const { toDate, leftReview, id } = reservationsData.slice(-1)[0];
       setLastReservationId(id);
-      canReserve.current = formatDate(toDate) <= formatDate(CURRENT_DATE);
+      canReserve.current = formatDate(toDate) <= formatDate(CURRENT_DATE) && userId !== hostId;
       setOpenReviewModal(canReserve.current && !leftReview);
     }
   };
@@ -92,11 +91,7 @@ const Publication = () => {
   }, []);
 
   useEffect(() => {
-    getDisabledDates(reservations);
-  }, [reservations]);
-
-  useEffect(() => {
-    if (isLoggedIn) getLoggedUserReservations();
+    if (isLoggedIn && userId) getLoggedUserReservations();
   }, [isLoggedIn]);
 
   return (
@@ -108,7 +103,7 @@ const Publication = () => {
           <Typography className={styles.title}>{title}</Typography>
           <div className={styles.columnsContainer}>
             <div className={styles.leftColumn}>
-              <Carousel className={styles.carouselContainer}>
+              <Carousel className={styles.carouselContainer} navButtonsAlwaysVisible>
                 {images?.map((image, index) => (
                   <img className={styles.image} key={index} src={image} alt={image} />
                 ))}
@@ -116,14 +111,21 @@ const Publication = () => {
             </div>
             <div className={styles.rightColumn}>
               <div className={styles.priceContainer}>
-                <Typography className={styles.pricePerNight}>$ARS {pricePerNight}</Typography>
-                {userId !== hostId && canReserve.current && (
-                  <Button onClick={handleReservation} variant="contained" color="primary">
+                <Typography className={styles.pricePerNight}>
+                  $ARS {formatPrice(pricePerNight)}
+                </Typography>
+                {canReserve.current && (
+                  <Button
+                    onClick={handleReservation}
+                    variant="contained"
+                    size="large"
+                    color="primary"
+                  >
                     Reservar
                   </Button>
                 )}
               </div>
-              <UserTitle user={hostUser} />
+              <UserTitle user={hostUser.current} />
               <Typography className={styles.location}>
                 <LocationOn color="primary" />
                 {address && `${address}, `}
@@ -153,14 +155,15 @@ const Publication = () => {
               <ReservationModal
                 open={handleOpenModal}
                 onClose={handleCloseModal}
-                disabledDates={disabledDates}
-                publicationId={publicationId}
+                disabledDates={disabledDates.current}
+                rentalId={rentalId}
+                pricePerNight={pricePerNight}
               />
               <ReviewModal
                 publicationTitle={title}
-                hostFullName={`${hostUser.firstname} ${hostUser.lastname}`}
+                hostFullName={`${hostUser.current.firstname} ${hostUser.current.lastname}`}
                 userId={userId}
-                rentalId={publicationId}
+                rentalId={rentalId}
                 otherUserId={hostId}
                 open={openReviewModal}
                 reservationId={lastReservationId}

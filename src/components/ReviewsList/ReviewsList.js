@@ -8,8 +8,13 @@ const ReviewsList = ({ reviews, noReviewsMessage }) => {
   return (
     <div className={`${styles.leftColumn} ${styles.reviewsContainer}`}>
       <Typography className={styles.descriptionTitle}>Comentarios</Typography>
-      {reviews.map(({ description: reviewDescription, stars, userId: reviewerId }) => (
-        <Comment key={reviewerId} userId={reviewerId} stars={stars} comment={reviewDescription} />
+      {reviews.map(({ description: reviewDescription, stars, userId: reviewerId }, index) => (
+        <Comment
+          key={reviewerId + index}
+          userId={reviewerId}
+          stars={stars}
+          comment={reviewDescription}
+        />
       ))}
       {!reviews.length && <Typography>{noReviewsMessage}</Typography>}
     </div>

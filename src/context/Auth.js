@@ -46,7 +46,6 @@ export const AuthContextProvider = ({ children }) => {
         setUserInfo(user);
         localStorage.setItem("user", JSON.stringify(user));
         localStorage.setItem("isLogged", true);
-        console.log("¿asdasdasd");
       })
       .catch((err) => {
         console.error(err);

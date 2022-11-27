@@ -6,8 +6,7 @@ import { dbGet } from "../../utils/db";
 import { AuthContext } from "../../context/Auth";
 import { profileStyles } from "./ProfileStyles";
 import ProfilePic from "../../assets/profilePic.svg";
-import Comment from "../../components/Comment/Comment";
-import ReviewsList from "../../components/CommentsList/ReviewsList";
+import ReviewsList from "../../components/ReviewsList/ReviewsList";
 
 const Profile = (props) => {
   const styles = profileStyles();
