@@ -24,7 +24,7 @@ import { useDatePicker } from "../../hooks/useDatePicker";
 const ReservationModal = ({
   open,
   onClose,
-  publicationId: rentalId,
+  rentalId,
   disabledDates = [],
   pricePerNight,
 }) => {
