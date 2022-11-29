@@ -6,7 +6,7 @@ export const AuthContext = createContext(null);
 const initialSessionState = {
   isLoggedIn: JSON.parse(localStorage.getItem("isLogged")) || false,
   isLoginPending: false,
-  loginError: null,
+  loginError: null
 };
 
 const initialUserState = {
@@ -14,7 +14,7 @@ const initialUserState = {
   firstname: "",
   lastname: "",
   mail: "",
-  role: null,
+  role: null
 };
 
 export const AuthContextProvider = ({ children }) => {
@@ -24,11 +24,12 @@ export const AuthContextProvider = ({ children }) => {
   useEffect(() => {
     if (authState.isLoggedIn) {
       const user = JSON.parse(localStorage.getItem("user"));
+
       setUserInfo(user);
     }
     setAuthState((prevState) => ({
       ...prevState,
-      isLoggedIn: authState.isLoggedIn,
+      isLoggedIn: authState.isLoggedIn
     }));
   }, []);
 
@@ -68,7 +69,7 @@ export const AuthContextProvider = ({ children }) => {
     authState,
     userInfo,
     login,
-    logout,
+    logout
   }));
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

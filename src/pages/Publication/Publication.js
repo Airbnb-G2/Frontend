@@ -25,7 +25,7 @@ const Publication = () => {
   const [lastReservationId, setLastReservationId] = useState();
   const {
     userInfo,
-    authState: { isLoggedIn },
+    authState: { isLoggedIn }
   } = useContext(AuthContext);
   const disabledDates = useRef([]);
   const canReserve = useRef(true);
@@ -44,7 +44,7 @@ const Publication = () => {
     amenities,
     description,
     hostId,
-    reviews,
+    reviews
   } = publication || {};
 
   const getPublicationData = async () => {
@@ -54,7 +54,7 @@ const Publication = () => {
       const { rental } = await dbGet(`rental/${rentalId}`);
       const hostInfo = await dbGet(`user/${rental.hostId}`);
       const { items } = await dbGet("review", {
-        rentalId: rental.id,
+        rentalId: rental.id
       });
       disabledDates.current = getDisabledDates(rental.reservations);
       hostUser.current = hostInfo;
@@ -68,7 +68,7 @@ const Publication = () => {
   const getLoggedUserReservations = async () => {
     const { items: reservationsData } = await dbGet("reservation", {
       rentalId,
-      guestId: userId,
+      guestId: userId
     });
     if (reservationsData.length) {
       const { toDate, leftReview, id } = reservationsData.slice(-1)[0];

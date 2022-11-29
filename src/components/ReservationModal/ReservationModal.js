@@ -10,6 +10,7 @@ import {
   Snackbar,
   Stack,
   Typography,
+  Alert
 } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import { DateRangePicker } from "react-date-range";
@@ -21,20 +22,14 @@ import { AuthContext } from "../../context/Auth";
 import { formatDate, formatPrice, getDatesInRange } from "../../utils/utils";
 import { useDatePicker } from "../../hooks/useDatePicker";
 
-const ReservationModal = ({
-  open,
-  onClose,
-  rentalId,
-  disabledDates = [],
-  pricePerNight,
-}) => {
+const ReservationModal = ({ open, onClose, rentalId, disabledDates = [], pricePerNight }) => {
   const navigate = useNavigate();
   const { userInfo } = useContext(AuthContext);
   const [totalPrice, setTotalPrice] = useState(0);
   const [openSnackbar, setOpenSnackbar] = useState(false);
   const { dateRange, handleCancelSelection, handleDateRangeSelect } = useDatePicker();
   const { formState, handleInputChange, resetFormState } = useForm({
-    numberOfGuests: "",
+    numberOfGuests: ""
   });
 
   const styles = reservationModalStyles();
@@ -53,13 +48,13 @@ const ReservationModal = ({
       rentalId,
       guestId: userId,
       fromDate: formatDate(startDate),
-      toDate: formatDate(endDate),
+      toDate: formatDate(endDate)
     })
       .then(() => {
         setOpenSnackbar(true);
         setTimeout(() => {
           navigate(-1);
-        }, 1500);
+        }, 4000);
       })
       .catch(({ data }) => console.error(data));
   };
@@ -116,12 +111,16 @@ const ReservationModal = ({
         </Stack>
       </DialogActions>
 
-      <Snackbar
-        open={openSnackbar}
-        autoHideDuration={1500}
-        message="La publicación se creo correctamente!"
-        severity="success"
-      />
+      <Snackbar open={openSnackbar} autoHideDuration={4000}>
+        <Alert
+          severity="success"
+          sx={{ width: "25%", color: "#FFF" }}
+          elevation={6}
+          variant="filled"
+        >
+          Tu reserva se creo correctamente!
+        </Alert>
+      </Snackbar>
     </Dialog>
   );
 };
